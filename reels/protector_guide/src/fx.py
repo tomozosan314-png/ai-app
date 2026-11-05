@@ -103,7 +103,7 @@ def paste_scaled(dst, spr, cx, cy, scale, alpha=1.0, rot=0.0):
 
 
 def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
-                    maxw=900, stagger=0.035, gap=1.2, end=None,
+                    maxw=900, stagger=0.035, gap=1.72, end=None,
                     fontpath=POP, anim="pop", marker=None, align="center"):
     """Animated multi-line text.
 
@@ -133,10 +133,12 @@ def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
         if mk is not None:
             p = ease_out_cubic((t - ls) / 0.35)
             if p > 0:
-                mh = lh * 0.32
+                ms = max(it[1] for it in items)
+                mh = ms * 0.16
+                my = base + ms * 0.64
                 d = ImageDraw.Draw(img)
-                d.rounded_rectangle([x0 - 10, base + lh * 0.08, x0 - 10 + (w + 20) * p,
-                                     base + lh * 0.08 + mh], radius=int(mh / 2),
+                d.rounded_rectangle([x0 - 10, my, x0 - 10 + (w + 20) * p,
+                                     my + mh], radius=int(mh / 2),
                                     fill=mk + (int(235 * out_a),))
         for i, (ch, s, color, x) in enumerate(items):
             lt = t - ls - i * stagger

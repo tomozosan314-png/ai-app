@@ -25,7 +25,7 @@ PREVIEW = "--preview" in sys.argv
 
 CAP_BOTTOM = 1590   # captions are pinned to the lower area (above IG UI)
 CAP_X = 530
-CAP_W = 900
+CAP_W = 920
 
 events = []  # (time, kind) for the audio pass
 
@@ -92,6 +92,7 @@ def L(segs, size=88, delay=0.0, marker=None):
 
 
 def caption(img, t, lines, start=0.12, end=None, **kw):
+    lines = [dict(l, size=int(l["size"] * 1.12)) for l in lines]
     draw_text_block(img, lines, t, start, CAP_X, cy_bottom=CAP_BOTTOM, maxw=CAP_W,
                     end=end, **kw)
 
@@ -148,7 +149,7 @@ scene(3.1, lambda t: c1.next(),
           L([("プロテクター、", BLACK)], 96),
           L([("なんとなく", ORANGE, 1.1), ("で", BLACK), ("選んでない？", BLACK)], 84,
             delay=0.45, marker=YELLOW)]),
-      lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 900, 1150, 1.0, rot=-12),
+      lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 900, 930, 1.0, rot=-12),
       sfx=[(0.12, "pop"), (0.57, "pop"), (1.0, "boing")])
 
 # 2a. Mini-ramp falls
@@ -169,31 +170,27 @@ scene(c3.n / FPS, lambda t: c3.next(),
           L([("＝", BLACK), ("膝", ORANGE, 1.25), ("から転ぶ！", BLACK)], 92, delay=0.55)]),
       sfx=[(0.25, "whoosh"), (0.12, "pop"), (0.67, "pop")])
 
-# 3. Illustration card
-ks_frames = [kneeslide(phase=k / 24) for k in range(24)]
-
-
+# 3. "Lifeline" text card (no illustration)
 def s3_ov(img, t):
-    p = ease_out_back(t / 0.45, 1.6)
-    spr = ks_frames[int(t * 24) % 24]
-    paste_scaled(img, spr, W / 2, 700, 0.98 * p)
     d = ImageDraw.Draw(img)
-    decor_stars(img, t, [(150, 300, 40, 0), (940, 260, 34, 1.5), (960, 1140, 30, 3)])
-    if t > 0.8:
-        pill(img, 770, 930, "膝パッド", size=46, fg=WHITE, bg=ORANGE, border=WHITE,
-             scale=ease_out_back((t - 0.8) / 0.3))
+    p = ease_out_back((t - 0.9) / 0.35)
+    if p > 0:
+        burst(d, W / 2, 1190, 400 * p, 470 * p, [188, 198, 208, -8, -18, -28], 16, ORANGE)
+    decor_stars(img, t, [(150, 420, 44, 0), (930, 380, 38, 1.5), (140, 1500, 36, 3),
+                         (940, 1460, 42, 2)])
     draw_text_block(img, [
-        L([("だから", BLACK), ("膝パッド", ORANGE), ("が", BLACK)], 96),
-        L([("“命綱”！", CORAL, 1.0)], 170, delay=0.5, marker=YELLOW)],
-        t, 0.45, W / 2, cy_top=1180, maxw=920)
+        L([("だから", BLACK)], 110),
+        L([("膝パッド", ORANGE), ("が", BLACK)], 150, delay=0.35),
+        L([("“命綱”！", CORAL)], 200, delay=0.85, marker=YELLOW)],
+        t, 0.1, W / 2, cy_top=540, maxw=960)
 
 
-scene(3.6, lambda t: CREAM_BG.copy(), s3_ov,
-      sfx=[(0.0, "whoosh"), (0.45, "pop"), (0.8, "ding"), (0.95, "boing")], tag=False)
+scene(3.4, lambda t: CREAM_BG.copy(), s3_ov,
+      sfx=[(0.0, "whoosh"), (0.1, "pop"), (0.45, "pop"), (0.95, "boing")], tag=False)
 
 # 4a. Split comparison
-c4l = Clip(SMALL, 1.8, 2.8, w=540, h=H)
-c4r = Clip(BIG, 0.0, 2.6, w=540, h=H)
+c4l = Clip(SMALL, 2.0, 2.6, w=540, h=H, crop="540:1920:216:0")
+c4r = Clip(BIG, 0.7, 1.35, speed=0.5, w=540, h=H, crop="540:1920:120:0")
 
 
 def split_bg(t):
@@ -218,9 +215,9 @@ def s4a_ov(img, t):
 scene(2.8, split_bg, s4a_ov, sfx=[(0.15, "pop"), (0.55, "pop"), (0.9, "pop")])
 
 # 4b. Good pads close
-c5 = Clip(BIG, 0.3, 2.3, speed=0.6)
+c5 = Clip(BIG, 0.7, 1.35, speed=0.37, crop="760:1351:10:200")
 scene(c5.n / FPS, lambda t: c5.next(),
-      lambda img, t: sticker(img, t, ok_mark(230), 860, 520, 0.3, rot=0),
+      lambda img, t: sticker(img, t, ok_mark(200), 900, 420, 0.3, rot=0),
       lambda img, t: caption(img, t, [
           L([("厚め", ORANGE), ("・", BLACK), ("ハードキャップ", ORANGE), ("！", BLACK)], 92,
             marker=YELLOW),
