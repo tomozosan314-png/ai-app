@@ -178,7 +178,7 @@ def s3_ov(img, t):
     d = ImageDraw.Draw(img)
     p = ease_out_back((t - 0.9) / 0.35)
     if p > 0:
-        burst(d, W / 2, 1190, 400 * p, 470 * p, [188, 198, 208, -8, -18, -28], 16, ORANGE)
+        burst(d, W / 2, 1150, 475 * p, 530 * p, [188, 198, 208, -8, -18, -28], 16, ORANGE)
     decor_stars(img, t, [(150, 420, 44, 0), (930, 380, 38, 1.5), (140, 1500, 36, 3),
                          (940, 1460, 42, 2)])
     draw_text_block(img, [
@@ -260,13 +260,25 @@ scene(c6.n / FPS, lambda t: c6.next(), s5_ov,
 # 6. Wrist guard (fast-forward)
 c7 = Clip(WRIST, 0.0, 11.2, speed=1.8, crop="608:1080:656:0")
 FF = ff_badge()
-scene(c7.n / FPS, lambda t: c7.next(),
+WR_SHIFT = 630  # move footage up so the wrist/strap stays clear of the captions
+
+
+def wrist_bg(t):
+    fr = c7.next()
+    img = Image.new("RGB", (W, H))
+    img.paste(fr.crop((0, WR_SHIFT, W, H)), (0, 0))
+    img.paste(CREAM_BG.crop((0, H - WR_SHIFT, W, H)), (0, H - WR_SHIFT))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, H - WR_SHIFT - 6, W, H - WR_SHIFT + 6], fill=WHITE)
+    return img
+
+
+scene(c7.n / FPS, wrist_bg,
       lambda img, t: sticker(img, t, FF, 840, 380, 0.1, wobble=False),
-      lambda img, t: caption(img, t, [
-          L([("肘", ORANGE), ("・", BLACK), ("手首", ORANGE), ("も", BLACK)], 160),
-          L([("セットで", BLACK)], 160, delay=0.35),
-          L([("安心！", CORAL)], 180, delay=0.7, marker=YELLOW)],
-          start=0.35),
+      lambda img, t: draw_text_block(img, [
+          L([("肘", ORANGE), ("・", BLACK), ("手首", ORANGE), ("も", BLACK)], 130),
+          L([("セットで", BLACK), ("安心！", CORAL)], 130, delay=0.4, marker=YELLOW)],
+          t, 0.35, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W),
       sfx=[(0.1, "whoosh"), (0.35, "pop"), (0.8, "pop")])
 
 # 7. Where to buy (card)

@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 FONT_DIR = "/tmp/claude-0/-home-user-ai-app/4d0dac7b-7b1e-524e-acb0-cc9ba3078324/scratchpad/fonts/"
 POP = FONT_DIR + "MochiyPopOne-Regular.ttf"
 ROUND = FONT_DIR + "MPLUSRounded1c-Black.ttf"
+GOTH = FONT_DIR + "MPLUS1p-Black.ttf"  # heavy gothic for captions
 
 W, H, FPS = 1080, 1920, 30
 
@@ -45,12 +46,12 @@ def ease_in_out(x):
     return x * x * (3 - 2 * x)
 
 
-STROKE = 0.17   # outline width (ratio of font size)
-GAP = -0.2      # clear space between neighbouring outlines (ratio of font size)
+STROKE = 0.075  # thin white outline (ratio of font size)
+TRACK = 0.0     # normal letter spacing
 
 
 @lru_cache(maxsize=2048)
-def glyph(ch, size, color, stroke_ratio=STROKE, fontpath=POP, shadow=True):
+def glyph(ch, size, color, stroke_ratio=STROKE, fontpath=GOTH, shadow=False):
     """A single character with a thick white outline and soft drop shadow."""
     f = font(fontpath, size)
     sw = max(2, int(size * stroke_ratio))
@@ -74,29 +75,21 @@ def glyph(ch, size, color, stroke_ratio=STROKE, fontpath=POP, shadow=True):
     return img, fill, pad, adv
 
 
-def layout_line(segs, size, maxw, fontpath=POP):
-    """Place characters by their *inked* extent incl. the white outline, so that
-    neighbouring outlines never touch. Returns (items, width, size_used).
-    items: (ch, size, color, origin_x) where origin_x is the text origin."""
+def layout_line(segs, size, maxw, fontpath=GOTH):
+    """Normal (advance-based) letter spacing. Returns (items, width, size_used).
+    items: (ch, size, color, origin_x)."""
     while True:
-        items, cur = [], 0.0
-        last_gap = 0.0
+        items, x = [], 0.0
         for seg in segs:
             text, color = seg[0], seg[1]
             sc = seg[2] if len(seg) > 2 else 1.0
             s = int(size * sc)
             f = font(fontpath, s)
-            sw = max(2, int(s * STROKE))
             for ch in text:
-                l, t, r, b = f.getbbox(ch, stroke_width=sw)
-                if r - l <= sw * 2 + 1:  # blank glyph
-                    l, r = 0, f.getlength(ch)
-                items.append((ch, s, color, cur - l))
-                last_gap = s * GAP
-                cur += (r - l) + last_gap
-        w = cur - last_gap
-        if w <= maxw or size < 30:
-            return items, w, size
+                items.append((ch, s, color, x))
+                x += f.getlength(ch) + s * TRACK
+        if x <= maxw or size < 30:
+            return items, x, size
         size = int(size * 0.95)
 
 
@@ -118,8 +111,8 @@ def paste_scaled(dst, spr, cx, cy, scale, alpha=1.0, rot=0.0):
 
 
 def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
-                    maxw=900, stagger=0.035, gap=1.5, end=None,
-                    fontpath=POP, anim="pop", marker=None, align="center", scale=1.0):
+                    maxw=900, stagger=0.035, gap=1.32, end=None,
+                    fontpath=GOTH, anim="pop", marker=None, align="center", scale=1.0):
     """Animated multi-line text.
 
     lines: list of dict(segs=[(text,color[,scale])], size=int, delay=float,
@@ -150,8 +143,8 @@ def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
             p = ease_out_cubic((t - ls) / 0.35)
             if p > 0:
                 ms = max(it[1] for it in items)
-                mh = ms * 0.16
-                my = base + ms * 0.64
+                mh = ms * 0.13
+                my = base + ms * 0.56
                 if out_a > 0.01:
                     ov = Image.new("RGBA", (int(w + 40), int(mh + 4)), (0, 0, 0, 0))
                     ImageDraw.Draw(ov).rounded_rectangle(
