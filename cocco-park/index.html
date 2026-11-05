@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>こっこパーク｜キッズスケボースクール</title>
-  <meta name="description" content="こっこパークは、3歳から通えるキッズ向けスケートボードスクールです。少人数制・プロテクター無料レンタルで、はじめてでも安心。">
+  <meta name="description" content="こっこパークは、4歳から小学生まで通えるキッズ向けスケートボードスクールです。元幼稚園教諭のコーチがやさしく教えます。初回30分体験はレンタル込み1,000円。">
   <link rel="icon" href="images/chicken-white.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,8 @@
 </head>
 <body>
 
-<!-- 小さなひよこアイコン（ロゴ風）。色は CSS の --chick で白／茶を切り替え -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- 小さなにわとりアイコン（ロゴ風）。色は CSS の --chick で白／茶を切り替え -->
   <symbol id="chick" viewBox="0 0 64 64">
     <path d="M24 13c0-5 6-6 7-2 1-5 8-5 8 0 4-3 8 1 5 5H23c-3-1-2-4 1-3z" fill="#e8483b"/>
     <path d="M32 14c-10 0-15 8-15 17-5 1-8 6-8 12 0 9 9 14 23 14s23-5 23-14c0-6-3-11-8-12 0-9-5-17-15-17z" fill="var(--chick, #fff)" stroke="#3b2a1d" stroke-width="2.6" stroke-linejoin="round"/>
@@ -22,6 +22,32 @@
     <circle cx="37.5" cy="25" r="2" fill="#3b2a1d"/>
     <path d="M29 28.5l3-3 3 3-3 3.5z" fill="#f6b93b" stroke="#3b2a1d" stroke-width="1.4" stroke-linejoin="round"/>
     <path d="M30 34c0-1.6 2-1.6 2 0 0-1.6 2-1.6 2 0 0 2-2 3.5-2 3.5s-2-1.5-2-3.5z" fill="#e8483b"/>
+  </symbol>
+  <!-- スケボー（横から） -->
+  <symbol id="board" viewBox="0 0 80 32">
+    <path d="M4 10c2 4 5 6 10 6h52c5 0 8-2 10-6" fill="none" stroke="#3b2a1d" stroke-width="5" stroke-linecap="round"/>
+    <rect x="16" y="17" width="6" height="4" rx="1" fill="#3b2a1d"/>
+    <rect x="58" y="17" width="6" height="4" rx="1" fill="#3b2a1d"/>
+    <circle cx="19" cy="25" r="5.5" fill="var(--wheel, #f6b93b)" stroke="#3b2a1d" stroke-width="2.4"/>
+    <circle cx="61" cy="25" r="5.5" fill="var(--wheel, #f6b93b)" stroke="#3b2a1d" stroke-width="2.4"/>
+  </symbol>
+  <!-- スケボー（上から見たデッキ） -->
+  <symbol id="deck" viewBox="0 0 32 80">
+    <rect x="5" y="3" width="22" height="74" rx="11" fill="var(--deck, #e8483b)" stroke="#3b2a1d" stroke-width="2.6"/>
+    <circle cx="11" cy="17" r="1.6" fill="#3b2a1d"/><circle cx="21" cy="17" r="1.6" fill="#3b2a1d"/>
+    <circle cx="11" cy="63" r="1.6" fill="#3b2a1d"/><circle cx="21" cy="63" r="1.6" fill="#3b2a1d"/>
+    <path d="M10 40h12M16 34v12" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
+  </symbol>
+  <!-- ヘルメット -->
+  <symbol id="helmet" viewBox="0 0 64 48">
+    <path d="M6 36C6 18 18 6 33 6s26 12 26 28H6z" fill="var(--helmet, #f6b93b)" stroke="#3b2a1d" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M22 9v10M33 6v12M44 9v10" stroke="#3b2a1d" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M4 36h34" stroke="#3b2a1d" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+  <!-- ウィール -->
+  <symbol id="wheel" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="12" fill="#fff" stroke="#3b2a1d" stroke-width="3"/>
+    <circle cx="16" cy="16" r="5" fill="var(--wheel, #e8483b)" stroke="#3b2a1d" stroke-width="2"/>
   </symbol>
 </svg>
 
@@ -35,11 +61,10 @@
   </button>
   <nav id="nav" class="nav">
     <a href="#about">こっこパークって？</a>
-    <a href="#class">クラス・料金</a>
-    <a href="#flow">レッスンの流れ</a>
-    <a href="#staff">スタッフ</a>
+    <a href="#price">料金</a>
+    <a href="#flow">はじめるまで</a>
+    <a href="#coach">コーチ</a>
     <a href="#faq">よくある質問</a>
-    <a href="#access">アクセス</a>
     <a href="#contact" class="nav-cta">体験予約</a>
   </nav>
 </header>
@@ -48,15 +73,18 @@
 
   <!-- ===== ヒーロー ===== -->
   <section class="hero">
+    <svg class="sk sk-h1" aria-hidden="true"><use href="#board"/></svg>
+    <svg class="sk sk-h2" aria-hidden="true"><use href="#wheel"/></svg>
+    <svg class="sk sk-h3" aria-hidden="true"><use href="#helmet"/></svg>
     <div class="hero-inner">
       <div class="hero-text">
         <img class="hero-logo" src="images/logo.png" alt="COCCO PARK こっこパーク" width="807" height="703">
-        <p class="hero-badge">3さいから OK！</p>
+        <p class="hero-badge">4さい〜小学生</p>
         <h1>はじめての<br><span class="hl">スケボー</span>、<br>こっこパークで！</h1>
-        <p class="lead">キッズ専門のスケートボードスクール。<br>少人数でやさしく、楽しく。「できた！」をいっしょに増やそう。</p>
+        <p class="lead">キッズ専門のスケートボードスクール。<br>元幼稚園の先生が、やさしく楽しく教えます。</p>
         <div class="hero-btns">
-          <a href="#contact" class="btn btn-primary">無料体験を予約する</a>
-          <a href="#class" class="btn btn-ghost">クラスを見る</a>
+          <a href="#contact" class="btn btn-primary">体験を予約する</a>
+          <a href="#price" class="btn btn-ghost">料金を見る</a>
         </div>
       </div>
       <div class="hero-art" aria-hidden="true">
@@ -65,6 +93,7 @@
         <img class="art-goat" src="images/goat.png" alt="">
         <img class="art-chicken-w" src="images/chicken-white.png" alt="">
         <img class="art-chicken-b" src="images/chicken-brown.png" alt="">
+        <svg class="art-board"><use href="#board"/></svg>
       </div>
     </div>
     <div class="ground" aria-hidden="true"></div>
@@ -72,161 +101,132 @@
 
   <!-- ===== 特徴 ===== -->
   <section id="about" class="section">
+    <svg class="sk sk-a1" aria-hidden="true"><use href="#deck"/></svg>
     <h2 class="sec-title"><svg class="chick-ico white"><use href="#chick"/></svg>こっこパークって？</h2>
-    <p class="sec-lead">スケボーがはじめての子も、もっと上手になりたい子も。<br>パークのにわとりたちといっしょに、のびのび練習できるスクールです。</p>
+    <p class="sec-lead">スケボーがはじめての子も、もっと上手になりたい子も。<br>にわとりやヤギのいるパークで、のびのび練習できるスクールです。</p>
 
     <div class="cards">
       <article class="card">
         <div class="card-ico c-yellow"><svg class="chick-ico white big"><use href="#chick"/></svg></div>
-        <h3>3さいから通える</h3>
-        <p>年齢・レベルに合わせたクラス分け。ボードに立つところから、ゆっくりスタートします。</p>
+        <h3>4さいから小学生まで</h3>
+        <p>ボードに立つところから、一人ひとりのペースに合わせてゆっくりスタートします。</p>
       </article>
       <article class="card">
-        <div class="card-ico c-red"><svg class="chick-ico brown big"><use href="#chick"/></svg></div>
-        <h3>プロテクター無料レンタル</h3>
-        <p>ヘルメット・ひじ／ひざパッド・ボードはすべて無料で貸し出し。手ぶらで来られます。</p>
+        <div class="card-ico c-red"><img src="images/staff.png" alt="" class="ico-staff"></div>
+        <h3>元幼稚園の先生がコーチ</h3>
+        <p>子どもと関わってきた経験と、スケボー歴10年。こわがりな子も安心です。</p>
       </article>
       <article class="card">
-        <div class="card-ico c-mint"><img src="images/goat.png" alt=""></div>
-        <h3>少人数でしっかり見守り</h3>
-        <p>コーチ1人につき子ども最大5人まで。ケガをしない転び方から丁寧に教えます。</p>
+        <div class="card-ico c-mint"><svg class="ico-board"><use href="#board"/></svg></div>
+        <h3>手ぶらで体験OK</h3>
+        <p>初回の30分体験は、ボードなどのレンタル込みで1,000円。気軽にためしてみてね。</p>
       </article>
     </div>
   </section>
 
-  <!-- ===== クラス・料金 ===== -->
-  <section id="class" class="section section-tint">
-    <img class="deco deco-tr" src="images/chicken-brown.png" alt="" aria-hidden="true">
-    <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>クラス・料金</h2>
-    <p class="sec-lead">まずは無料体験から。お子さまに合うクラスをご案内します。</p>
+  <!-- ===== 料金 ===== -->
+  <section id="price" class="section section-tint">
+    <img class="deco deco-tr" src="images/chicken-azuki.png" alt="" aria-hidden="true">
+    <svg class="sk sk-p1" aria-hidden="true"><use href="#wheel"/></svg>
+    <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>料金</h2>
+    <p class="sec-lead">まずは30分の体験から。お子さまのようすを見ながらご案内します。</p>
 
     <div class="plans">
-      <article class="plan">
-        <p class="plan-age">3〜6さい</p>
-        <h3>ひよこクラス</h3>
-        <p class="price"><span>月額</span>6,000<small>円（税込）</small></p>
-        <ul class="checks">
-          <li>月4回・1回50分</li>
-          <li>ボードに乗る・こぐ・止まる</li>
-          <li>保護者の見学OK</li>
-        </ul>
-      </article>
       <article class="plan plan-pop">
-        <p class="pop-tag">人気No.1</p>
-        <p class="plan-age">小学1〜6年生</p>
-        <h3>にわとりクラス</h3>
-        <p class="price"><span>月額</span>8,000<small>円（税込）</small></p>
+        <p class="pop-tag">はじめての方</p>
+        <h3>体験レッスン</h3>
+        <p class="plan-time">30分・レンタル込み</p>
+        <p class="price">1,000<small>円</small></p>
         <ul class="checks">
-          <li>月4回・1回60分</li>
-          <li>ターン・坂道・はじめてのトリック</li>
-          <li>年2回の発表会あり</li>
+          <li>初回のみ</li>
+          <li>ボード・道具は貸し出します</li>
         </ul>
       </article>
       <article class="plan">
-        <p class="plan-age">年齢不問</p>
-        <h3>プライベート</h3>
-        <p class="price"><span>1回</span>4,500<small>円（税込）</small></p>
+        <h3>レッスン</h3>
+        <p class="plan-time">1時間</p>
+        <p class="price">2,000<small>円</small></p>
         <ul class="checks">
-          <li>マンツーマン・1回45分</li>
-          <li>苦手なところを集中レッスン</li>
-          <li>兄弟・親子での受講もOK</li>
+          <li>レベルに合わせてステップアップ</li>
+          <li>開講日はカレンダーをチェック</li>
         </ul>
       </article>
     </div>
-    <p class="note">入会金 3,000円／スポーツ保険料 年800円　※無料体験は1回限り（1家族2名まで）</p>
+
+    <div class="age-box">
+      <p class="age-title"><svg class="chick-ico white"><use href="#chick"/></svg>対象：4さい〜小学生</p>
+      <p>中学生以上の方は、<strong>支えなしで自分で滑れる方</strong>ならOKです。<br class="pc">
+        <span class="muted">※コーチが小柄なため、体の大きな方を支えることができません。ご了承ください。</span></p>
+    </div>
   </section>
 
-  <!-- ===== レッスンの流れ ===== -->
+  <!-- ===== はじめるまで ===== -->
   <section id="flow" class="section">
-    <h2 class="sec-title"><svg class="chick-ico white"><use href="#chick"/></svg>レッスンの流れ</h2>
+    <h2 class="sec-title"><svg class="chick-ico white"><use href="#chick"/></svg>はじめるまでの流れ</h2>
     <ol class="flow">
-      <li><span class="step">1</span><h3>あいさつ＆準備体操</h3><p>プロテクターをつけて、体をほぐします。</p></li>
-      <li><span class="step">2</span><h3>じょうずな転び方</h3><p>ケガをしないための大事な練習。毎回やります。</p></li>
-      <li><span class="step">3</span><h3>今日のチャレンジ</h3><p>レベルに合わせた課題に、コーチと挑戦！</p></li>
-      <li><span class="step">4</span><h3>できた！シール</h3><p>がんばった子には、こっこシールをプレゼント。</p></li>
+      <li><span class="step">1</span><h3>カレンダーをチェック</h3><p>開講日をカレンダーで確認してね。</p></li>
+      <li><span class="step">2</span><h3>LINE・インスタDMで連絡</h3><p>ご希望の日をお知らせください。</p></li>
+      <li><span class="step">3</span><h3>場所などのご案内</h3><p>ご連絡いただいた方に、詳細をお伝えします。</p></li>
+      <li><span class="step">4</span><h3>体験レッスン！</h3><p>30分・レンタル込みで1,000円。</p></li>
     </ol>
     <div class="flow-chicks" aria-hidden="true">
       <svg class="chick-ico white walk"><use href="#chick"/></svg>
       <svg class="chick-ico brown walk d1"><use href="#chick"/></svg>
-      <svg class="chick-ico white walk d2"><use href="#chick"/></svg>
-      <svg class="chick-ico brown walk d3"><use href="#chick"/></svg>
+      <svg class="chick-ico azuki walk d2"><use href="#chick"/></svg>
+      <svg class="mini-board walk d3"><use href="#board"/></svg>
     </div>
   </section>
 
-  <!-- ===== スタッフ ===== -->
-  <section id="staff" class="section section-tint">
-    <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>スタッフ紹介</h2>
+  <!-- ===== コーチ ===== -->
+  <section id="coach" class="section section-tint">
+    <svg class="sk sk-c1" aria-hidden="true"><use href="#helmet"/></svg>
+    <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>コーチ紹介</h2>
     <div class="staff-main">
       <img src="images/staff.png" alt="コーチのイラスト" class="staff-photo">
       <div class="staff-body">
-        <p class="staff-role">ヘッドコーチ</p>
-        <h3>〇〇 コーチ</h3>
-        <p>スケボー歴〇年。「こわい」を「たのしい！」に変えるのが得意です。保育の資格をもち、小さなお子さまのレッスンも安心してお任せください。</p>
+        <p class="staff-role">コーチ</p>
+        <h3>大西 知美</h3>
+        <p class="staff-tags"><span>元幼稚園教諭</span><span>スケボー歴10年</span></p>
+        <p>子どもたちの「できた！」がいちばんうれしい瞬間です。はじめてのスケボー、いっしょに楽しみましょう！</p>
       </div>
     </div>
 
-    <h3 class="sub-title">パークのなかまたち</h3>
     <div class="pals">
-      <figure class="pal">
-        <div class="pal-img"><img src="images/chicken-white.png" alt="白いにわとり"></div>
-        <figcaption><strong>こっこ</strong>パークの看板にわとり。<br>応援係です。</figcaption>
-      </figure>
-      <figure class="pal">
-        <div class="pal-img"><img src="images/chicken-brown.png" alt="茶色いにわとり"></div>
-        <figcaption><strong>ちゃこ</strong>こっこのなかよし。<br>朝いちばんに鳴きます。</figcaption>
-      </figure>
-      <figure class="pal">
-        <div class="pal-img"><img src="images/goat.png" alt="小さな黒ヤギ"></div>
-        <figcaption><strong>くろまめ</strong>小さな黒ヤギ。<br>レッスン後になでなでOK。</figcaption>
-      </figure>
+      <p class="pals-title">パークのなかまたち</p>
+      <ul>
+        <li><img src="images/chicken-white.png" alt=""><span>ひよ子</span></li>
+        <li><img src="images/chicken-brown.png" alt=""><span>トトレッタ</span></li>
+        <li><img src="images/chicken-azuki.png" alt=""><span>あずきちゃん</span></li>
+        <li class="pal-goat"><img src="images/goat.png" alt=""><span>エピちゃん</span></li>
+      </ul>
     </div>
   </section>
 
   <!-- ===== FAQ ===== -->
   <section id="faq" class="section">
+    <svg class="sk sk-f1" aria-hidden="true"><use href="#deck"/></svg>
     <h2 class="sec-title"><svg class="chick-ico white"><use href="#chick"/></svg>よくある質問</h2>
     <div class="faq">
       <details>
         <summary>スケボーをもっていなくても大丈夫？</summary>
-        <p>大丈夫です！ボード・ヘルメット・プロテクターはすべて無料でお貸しします。動きやすい服装とスニーカーでお越しください。</p>
+        <p>大丈夫です！初回の体験はレンタル込みなので、手ぶらで来られます。動きやすい服装とスニーカーでお越しください。</p>
       </details>
       <details>
         <summary>運動が苦手な子でもできますか？</summary>
-        <p>はい。最初はボードに立つ・歩くところから始めます。一人ひとりのペースに合わせるので、無理はさせません。</p>
+        <p>はい。元幼稚園教諭のコーチが、お子さまのペースに合わせて教えます。ボードに立つところからゆっくり始めましょう。</p>
       </details>
       <details>
-        <summary>雨の日はどうなりますか？</summary>
-        <p>屋根つきエリアでレッスンを行います。荒天でお休みの場合は、前日までにLINEでお知らせし、振替レッスンをご案内します。</p>
+        <summary>中学生以上でも受けられますか？</summary>
+        <p>支えなしで自分で滑れる方ならOKです。コーチが小柄なため、体の大きな方を支えることができません。ご了承ください。</p>
       </details>
       <details>
-        <summary>親は見学できますか？</summary>
-        <p>いつでも見学OKです。ベンチをご用意しています。にわとりやヤギとのふれあいもお楽しみください。</p>
+        <summary>場所はどこですか？</summary>
+        <p>ご連絡いただいた方に、詳しい場所をお伝えしています。LINEまたはインスタのDMからお問い合わせください。</p>
       </details>
       <details>
-        <summary>駐車場はありますか？</summary>
-        <p>無料駐車場が〇台分あります。満車の場合は近隣のコインパーキングをご利用ください。</p>
+        <summary>開講日はいつですか？</summary>
+        <p>開講日はカレンダーでお知らせしています。下の「開講日カレンダー」からチェックしてください。</p>
       </details>
-    </div>
-  </section>
-
-  <!-- ===== アクセス ===== -->
-  <section id="access" class="section section-tint">
-    <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>アクセス・開講日</h2>
-    <div class="access">
-      <dl class="info">
-        <dt>住所</dt><dd>〒000-0000　〇〇県〇〇市〇〇町 0-0-0</dd>
-        <dt>開講日</dt><dd>水・金 16:00〜18:00 ／ 土・日 9:00〜12:00</dd>
-        <dt>定休日</dt><dd>月・火・木（祝日はお問い合わせください）</dd>
-        <dt>電車</dt><dd>〇〇駅から徒歩〇分</dd>
-        <dt>お車</dt><dd>無料駐車場あり</dd>
-      </dl>
-      <div class="map">
-        <!-- Google マップの埋め込みコードに差し替えてください -->
-        <div class="map-ph">
-          <img src="images/chicken-white.png" alt="" aria-hidden="true">
-          <p>ここに地図が入ります</p>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -235,27 +235,35 @@
     <div class="contact-box">
       <img class="cb-goat" src="images/goat.png" alt="" aria-hidden="true">
       <img class="cb-chick" src="images/chicken-brown.png" alt="" aria-hidden="true">
-      <h2>まずは<span class="hl">無料体験</span>へ<br>あそびにきてね！</h2>
-      <p>ご予約・ご質問はお気軽にどうぞ。</p>
+      <img class="cb-chick2" src="images/chicken-white.png" alt="" aria-hidden="true">
+      <h2>まずは<span class="hl">体験レッスン</span>へ<br>あそびにきてね！</h2>
+      <p>ご予約・ご質問は <strong>LINE</strong> か <strong>インスタのDM</strong> からどうぞ。</p>
       <div class="contact-btns">
-        <a href="#" class="btn btn-line">LINEで予約する</a>
-        <a href="tel:000-0000-0000" class="btn btn-primary">📞 000-0000-0000</a>
+        <a href="https://lin.ee/xlMKfF2o" class="btn btn-line" target="_blank" rel="noopener">LINEで予約・相談</a>
+        <a href="https://www.instagram.com/coccopark_skateboard/" class="btn btn-insta" target="_blank" rel="noopener">インスタDMを送る</a>
       </div>
-      <p class="small">電話受付 10:00〜18:00（定休日をのぞく）</p>
+      <a href="https://lit.link/coccopark" class="cal-link" target="_blank" rel="noopener">
+        <svg class="chick-ico white"><use href="#chick"/></svg>開講日カレンダー・リンク集はこちら →
+      </a>
     </div>
   </section>
 
 </main>
 
 <footer class="site-footer">
-  <div class="footer-chicks" aria-hidden="true">
-    <svg class="chick-ico white"><use href="#chick"/></svg>
-    <svg class="chick-ico brown"><use href="#chick"/></svg>
-    <img src="images/goat.png" alt="">
-    <svg class="chick-ico white"><use href="#chick"/></svg>
+  <div class="footer-pals" aria-hidden="true">
+    <img src="images/chicken-white.png" alt="">
+    <img src="images/chicken-brown.png" alt="">
+    <img src="images/chicken-azuki.png" alt="">
+    <img class="fp-goat" src="images/goat.png" alt="">
   </div>
   <img src="images/logo.png" alt="COCCO PARK" class="footer-logo" width="120" height="105">
   <p>キッズスケボースクール こっこパーク</p>
+  <p class="footer-links">
+    <a href="https://lin.ee/xlMKfF2o" target="_blank" rel="noopener">LINE</a>
+    <a href="https://www.instagram.com/coccopark_skateboard/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://lit.link/coccopark" target="_blank" rel="noopener">lit.link</a>
+  </p>
   <p class="copy">&copy; COCCO PARK</p>
 </footer>
 
