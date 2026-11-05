@@ -82,9 +82,39 @@ def punch(img, t, amt=0.07, dur=0.3):
     return img.crop((x, y, x + cw, y + ch)).resize((W, H), Image.BILINEAR)
 
 
+def _title_telop():
+    """Big title telop shown only on the opening hook."""
+    w, h = 1000, 330
+    s = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(s)
+    # main banner
+    bx0, by0, bx1, by1 = 20, 95, w - 20, 265
+    d.rounded_rectangle([bx0 + 8, by0 + 12, bx1 + 8, by1 + 12], radius=36, fill=(60, 30, 15, 120))
+    d.rounded_rectangle([bx0, by0, bx1, by1], radius=36, fill=ORANGE, outline=WHITE, width=10)
+    f = font(GOTH, 96)
+    txt = "プロテクターの選び方"
+    tw = f.getlength(txt)
+    if tw > bx1 - bx0 - 50:
+        f = font(GOTH, int(96 * (bx1 - bx0 - 50) / tw))
+    d.text(((bx0 + bx1) / 2, (by0 + by1) / 2 + 4), txt, font=f, fill=WHITE, anchor="mm",
+           stroke_width=6, stroke_fill=BROWN)
+    # small tab on top-left
+    f2 = font(GOTH, 58)
+    tab = "子どもの"
+    tw2 = f2.getlength(tab)
+    tx0, ty0 = 60, 18
+    d.rounded_rectangle([tx0, ty0, tx0 + tw2 + 60, ty0 + 96], radius=26, fill=NAVY,
+                        outline=WHITE, width=8)
+    d.text((tx0 + 30 + tw2 / 2, ty0 + 50), tab, font=f2, fill=WHITE, anchor="mm")
+    return s
+
+
+TITLE = _title_telop()
+
+
 def top_tag(img, t):
-    pill(img, W / 2, 232, "子どものプロテクターの選び方", size=40, fg=BROWN,
-         alpha=1.0, scale=1.0)
+    sc = ease_out_back(t / 0.35, 1.6)
+    paste_scaled(img, TITLE, W / 2, 330, sc, clamp(t / 0.1), -2)
 
 
 def L(segs, size=88, delay=0.0, marker=None):
@@ -139,7 +169,7 @@ def decor_stars(img, t, pts):
 scenes = []
 
 
-def scene(dur, bg, *ov, punch_in=True, tag=True, sfx=None):
+def scene(dur, bg, *ov, punch_in=True, tag=False, sfx=None):
     scenes.append(dict(dur=dur, bg=bg, ov=ov, punch=punch_in, tag=tag, sfx=sfx or []))
 
 
@@ -152,7 +182,7 @@ scene(2.6, lambda t: c1.next(),
           L([("選んでない？", BLACK)], 150,
             delay=0.45, marker=YELLOW)]),
       lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 890, 740, 0.8, rot=-12),
-      sfx=[(0.12, "pop"), (0.57, "pop"), (1.0, "boing")])
+      sfx=[(0.12, "pop"), (0.57, "pop"), (1.0, "boing")], tag=True)
 
 # 2a. Mini-ramp falls
 c2 = Clip(KIDFALL, 0.0, 2.45, speed=1.0)
