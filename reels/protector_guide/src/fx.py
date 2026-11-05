@@ -45,8 +45,12 @@ def ease_in_out(x):
     return x * x * (3 - 2 * x)
 
 
+STROKE = 0.17   # outline width (ratio of font size)
+GAP = 0.035     # clear space between neighbouring outlines (ratio of font size)
+
+
 @lru_cache(maxsize=2048)
-def glyph(ch, size, color, stroke_ratio=0.17, fontpath=POP, shadow=True):
+def glyph(ch, size, color, stroke_ratio=STROKE, fontpath=POP, shadow=True):
     """A single character with a thick white outline and soft drop shadow."""
     f = font(fontpath, size)
     sw = max(2, int(size * stroke_ratio))
@@ -70,24 +74,29 @@ def glyph(ch, size, color, stroke_ratio=0.17, fontpath=POP, shadow=True):
     return img, fill, pad, adv
 
 
-TRACK = 0.06  # letter spacing (ratio of font size)
-
-
 def layout_line(segs, size, maxw, fontpath=POP):
-    """segs: list of (text, color[, scale]). Returns (items, width, size_used)."""
+    """Place characters by their *inked* extent incl. the white outline, so that
+    neighbouring outlines never touch. Returns (items, width, size_used).
+    items: (ch, size, color, origin_x) where origin_x is the text origin."""
     while True:
-        items, x = [], 0.0
+        items, cur = [], 0.0
+        last_gap = 0.0
         for seg in segs:
             text, color = seg[0], seg[1]
             sc = seg[2] if len(seg) > 2 else 1.0
             s = int(size * sc)
             f = font(fontpath, s)
+            sw = max(2, int(s * STROKE))
             for ch in text:
-                items.append((ch, s, color, x))
-                x += f.getlength(ch) + s * TRACK
-        x -= s * TRACK if items else 0
-        if x <= maxw or size < 30:
-            return items, x, size
+                l, t, r, b = f.getbbox(ch, stroke_width=sw)
+                if r - l <= sw * 2 + 1:  # blank glyph
+                    l, r = 0, f.getlength(ch)
+                items.append((ch, s, color, cur - l))
+                last_gap = s * GAP
+                cur += (r - l) + last_gap
+        w = cur - last_gap
+        if w <= maxw or size < 30:
+            return items, w, size
         size = int(size * 0.95)
 
 
@@ -110,13 +119,14 @@ def paste_scaled(dst, spr, cx, cy, scale, alpha=1.0, rot=0.0):
 
 def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
                     maxw=900, stagger=0.035, gap=1.5, end=None,
-                    fontpath=POP, anim="pop", marker=None, align="center"):
+                    fontpath=POP, anim="pop", marker=None, align="center", scale=1.0):
     """Animated multi-line text.
 
     lines: list of dict(segs=[(text,color[,scale])], size=int, delay=float,
                         marker=color or None)
     """
     laid = []
+    lines = [dict(l, size=int(l["size"] * scale)) for l in lines]
     for ln in lines:
         items, w, s = layout_line(ln["segs"], ln["size"], maxw, fontpath)
         lh = max(it[1] for it in items) * gap
@@ -142,10 +152,12 @@ def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
                 ms = max(it[1] for it in items)
                 mh = ms * 0.16
                 my = base + ms * 0.64
-                d = ImageDraw.Draw(img)
-                d.rounded_rectangle([x0 - 10, my, x0 - 10 + (w + 20) * p,
-                                     my + mh], radius=int(mh / 2),
-                                    fill=mk + (int(235 * out_a),))
+                if out_a > 0.01:
+                    ov = Image.new("RGBA", (int(w + 40), int(mh + 4)), (0, 0, 0, 0))
+                    ImageDraw.Draw(ov).rounded_rectangle(
+                        [0, 0, (w + 20) * p, mh], radius=int(mh / 2),
+                        fill=mk + (int(235 * out_a),))
+                    img.alpha_composite(ov, (int(x0 - 10), int(my)))
         for layer in (0, 1):  # 0: outlines/shadows, 1: fills (never covered)
             for i, (ch, s, color, x) in enumerate(items):
                 lt = t - ls - i * stagger
@@ -153,7 +165,7 @@ def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
                     continue
                 spr_o, spr_f, pad, adv = glyph(ch, s, color, fontpath=fontpath)
                 if anim == "pop":
-                    sc = ease_out_back(lt / 0.28, 1.4)
+                    sc = ease_out_back(lt / 0.28, 0.9)
                     dy = 0
                 elif anim == "drop":
                     sc = 1.0

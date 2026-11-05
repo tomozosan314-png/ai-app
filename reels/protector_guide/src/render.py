@@ -94,7 +94,7 @@ def L(segs, size=88, delay=0.0, marker=None):
 def caption(img, t, lines, start=0.12, end=None, **kw):
     lines = [dict(l) for l in lines]
     draw_text_block(img, lines, t, start, CAP_X, cy_bottom=CAP_BOTTOM, maxw=CAP_W,
-                    end=end, **kw)
+                    end=end, scale=0.8, **kw)
 
 
 def sticker(img, t, spr, cx, cy, start, rot=0, wobble=True, end=None):
@@ -115,14 +115,15 @@ _text_spr_cache = {}
 def text_sprite(text, size, color, rot=0):
     key = (text, size, color)
     if key not in _text_spr_cache:
-        f = font(POP, size)
-        sw = int(size * 0.16)
-        w = int(f.getlength(text) + sw * 2 + 20)
-        h = int(size * 1.5 + sw * 2)
-        s = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-        d = ImageDraw.Draw(s)
-        d.text((sw + 10, sw + size * 0.15), text, font=f, fill=color, stroke_width=sw,
-               stroke_fill=WHITE)
+        items, w, sz = layout_line([(text, color)], size, 2000)
+        pad = int(size * 0.5)
+        s = Image.new("RGBA", (int(w + pad * 2), int(size * 1.6 + pad)), (0, 0, 0, 0))
+        for layer in (0, 1):
+            for ch, cs, col, x in items:
+                o, f, gp, adv = glyph(ch, cs, col)
+                spr = f if layer else o
+                s.alpha_composite(spr, (int(pad + x + adv / 2 - spr.width / 2),
+                                        int(s.height / 2 - spr.height / 2)))
         _text_spr_cache[key] = s
     return _text_spr_cache[key]
 
@@ -184,7 +185,7 @@ def s3_ov(img, t):
         L([("だから", BLACK)], 150),
         L([("膝パッド", ORANGE), ("が", BLACK)], 175, delay=0.35),
         L([("“命綱”！", CORAL)], 215, delay=0.85, marker=YELLOW)],
-        t, 0.1, W / 2, cy_top=500, maxw=980)
+        t, 0.1, W / 2, cy_top=580, maxw=980, scale=0.88)
 
 
 scene(3.4, lambda t: CREAM_BG.copy(), s3_ov,
@@ -342,13 +343,13 @@ def s8_ov(img, t):
             if v * u - 0.5 * g * u * u < 0:
                 y = ground
         paste_scaled(img, COIN, x, y, 1.0, 1.0, rot + lt * 60 * (1 if lt < tf else 0))
-    draw_text_block(img, [L([("でも、", BLACK)], 160)], t, 0.1, W / 2, cy_top=280, maxw=980,
+    draw_text_block(img, [L([("でも、", BLACK)], 160)], t, 0.1, W / 2, cy_top=320, maxw=980, scale=0.88,
                     anim="drop")
     draw_text_block(img, [
         L([("お金", ORANGE), ("をかける", BLACK)], 145),
         L([("必要は", BLACK)], 160, delay=0.3),
         L([("ありません！", CORAL)], 150, delay=0.7, marker=YELLOW)],
-        t, 0.55, W / 2, cy_top=560, maxw=980)
+        t, 0.55, W / 2, cy_top=600, maxw=980, scale=0.88)
     decor_stars(img, t, [(140, 330, 42, 0), (950, 420, 36, 1), (930, 1200, 30, 2)])
 
 
@@ -386,7 +387,7 @@ def s10_ov(img, t):
     draw_text_block(img, [
         L([("ヘルメット", CORAL), ("編", BLACK)], 150, marker=YELLOW),
         L([("お楽しみに！", ORANGE)], 140, delay=0.4)],
-        t, 0.5, W / 2, cy_top=1040, maxw=980)
+        t, 0.5, W / 2, cy_top=1040, maxw=980, scale=0.88)
     if t > 1.3:
         pill(img, W / 2, 1640, "フォローして待っててね", size=50, fg=BROWN,
              scale=ease_out_back((t - 1.3) / 0.35))
