@@ -219,9 +219,12 @@ def s4a_ov(img, t):
 scene(2.8, split_bg, s4a_ov, sfx=[(0.15, "pop"), (0.55, "pop"), (0.9, "pop")])
 
 # 4b. Good pads close
+OKM = ok_mark(360, 40)
 c5 = Clip(BIG, 0.7, 1.35, speed=0.32, crop="760:1351:10:200")
 scene(c5.n / FPS, lambda t: c5.next(),
-      lambda img, t: sticker(img, t, ok_mark(200), 900, 420, 0.3, rot=0),
+      lambda img, t: sticker(img, t, OKM, 830, 500, 0.3, rot=0),
+      lambda img, t: pill(img, 830, 720, "おすすめ！", size=64, fg=WHITE, bg=(60, 190, 120),
+                          border=WHITE, scale=ease_out_back((t - 0.45) / 0.3)) if t > 0.45 else None,
       lambda img, t: caption(img, t, [
           L([("厚め", ORANGE), ("・", BLACK)], 160),
           L([("ハードキャップ", ORANGE), ("！", BLACK)], 125, delay=0.3, marker=YELLOW)],
@@ -255,7 +258,7 @@ scene(c6.n / FPS, lambda t: c6.next(), s5_ov,
       sfx=[(0.12, "pop"), (0.25, "buzz"), (0.42, "pop"), (0.77, "pop"), (2.7, "pop"), (3.15, "pop")])
 
 # 6. Wrist guard (fast-forward)
-c7 = Clip(WRIST, 0.0, 11.2, speed=2.5, crop="608:1080:656:0")
+c7 = Clip(WRIST, 0.0, 11.2, speed=1.8, crop="608:1080:656:0")
 FF = ff_badge()
 scene(c7.n / FPS, lambda t: c7.next(),
       lambda img, t: sticker(img, t, FF, 840, 380, 0.1, wobble=False),

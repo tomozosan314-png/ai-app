@@ -46,7 +46,7 @@ def ease_in_out(x):
 
 
 STROKE = 0.17   # outline width (ratio of font size)
-GAP = 0.035     # clear space between neighbouring outlines (ratio of font size)
+GAP = -0.2      # clear space between neighbouring outlines (ratio of font size)
 
 
 @lru_cache(maxsize=2048)
