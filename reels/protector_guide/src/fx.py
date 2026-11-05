@@ -111,7 +111,7 @@ def paste_scaled(dst, spr, cx, cy, scale, alpha=1.0, rot=0.0):
 
 
 def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
-                    maxw=900, stagger=0.035, gap=1.32, end=None,
+                    maxw=900, stagger=0.025, gap=1.32, end=None,
                     fontpath=GOTH, anim="pop", marker=None, align="center", scale=1.0):
     """Animated multi-line text.
 

@@ -144,56 +144,56 @@ def scene(dur, bg, *ov, punch_in=True, tag=True, sfx=None):
 
 
 # 1. Hook
-c1 = Clip(HOOK, 2.6, 3.09)
-scene(3.1, lambda t: c1.next(),
+c1 = Clip(HOOK, 3.0, 2.6)
+scene(2.6, lambda t: c1.next(),
       lambda img, t: caption(img, t, [
           L([("プロテクター、", BLACK)], 140),
-          L([("なんとなく", ORANGE), ("で", BLACK)], 150, delay=0.35),
+          L([("なんとなく", ORANGE), ("で", BLACK)], 150, delay=0.25),
           L([("選んでない？", BLACK)], 150,
             delay=0.45, marker=YELLOW)]),
-      lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 890, 740, 1.1, rot=-12),
+      lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 890, 740, 0.8, rot=-12),
       sfx=[(0.12, "pop"), (0.57, "pop"), (1.0, "boing")])
 
 # 2a. Mini-ramp falls
-c2 = Clip(KIDFALL, 0.0, 2.45, speed=0.75)
+c2 = Clip(KIDFALL, 0.0, 2.45, speed=1.0)
 scene(c2.n / FPS, lambda t: c2.next(),
       lambda img, t: caption(img, t, [
           L([("ミニランプ", ORANGE)], 160),
-          L([("特有の", BLACK)], 150, delay=0.3),
-          L([("転び方は…？", BLACK)], 150, delay=0.6)]),
+          L([("特有の", BLACK)], 150, delay=0.2),
+          L([("転び方は…？", BLACK)], 150, delay=0.4)]),
       sfx=[(0.12, "pop"), (0.52, "pop")])
 
 # 2b. Knee slide = fall onto knees
-c3 = Clip(ADULT, 0.0, 2.4, speed=0.8)
+c3 = Clip(ADULT, 0.0, 2.4, speed=0.95)
 scene(c3.n / FPS, lambda t: c3.next(),
       lambda img, t: sticker(img, t, text_sprite("ズザーッ！", 120, ORANGE), 560, 760, 0.25,
                              rot=-10),
       lambda img, t: caption(img, t, [
           L([("ニースライド", CORAL)], 155, marker=YELLOW),
-          L([("＝", BLACK), ("膝", ORANGE), ("から転ぶ！", BLACK)], 140, delay=0.55)]),
+          L([("＝", BLACK), ("膝", ORANGE), ("から転ぶ！", BLACK)], 140, delay=0.35)]),
       sfx=[(0.25, "whoosh"), (0.12, "pop"), (0.67, "pop")])
 
 # 3. "Lifeline" text card (no illustration)
 def s3_ov(img, t):
     d = ImageDraw.Draw(img)
-    p = ease_out_back((t - 0.9) / 0.35)
+    p = ease_out_back((t - 0.6) / 0.35)
     if p > 0:
         burst(d, W / 2, 1150, 475 * p, 530 * p, [188, 198, 208, -8, -18, -28], 16, ORANGE)
     decor_stars(img, t, [(150, 420, 44, 0), (930, 380, 38, 1.5), (140, 1500, 36, 3),
                          (940, 1460, 42, 2)])
     draw_text_block(img, [
         L([("だから", BLACK)], 150),
-        L([("膝パッド", ORANGE), ("が", BLACK)], 175, delay=0.35),
-        L([("“命綱”！", CORAL)], 215, delay=0.85, marker=YELLOW)],
+        L([("膝パッド", ORANGE), ("が", BLACK)], 175, delay=0.2),
+        L([("“命綱”！", CORAL)], 215, delay=0.55, marker=YELLOW)],
         t, 0.1, W / 2, cy_top=580, maxw=980, scale=0.88)
 
 
-scene(3.4, lambda t: CREAM_BG.copy(), s3_ov,
+scene(2.5, lambda t: CREAM_BG.copy(), s3_ov,
       sfx=[(0.0, "whoosh"), (0.1, "pop"), (0.45, "pop"), (0.95, "boing")], tag=False)
 
 # 4a. Split comparison
-c4l = Clip(SMALL, 2.0, 2.6, w=540, h=H, crop="540:1920:216:0")
-c4r = Clip(BIG, 0.7, 1.35, speed=0.5, w=540, h=H, crop="540:1920:120:0")
+c4l = Clip(SMALL, 2.4, 2.1, w=540, h=H, crop="540:1920:216:0")
+c4r = Clip(BIG, 0.7, 1.35, speed=0.65, w=540, h=H, crop="540:1920:120:0")
 
 
 def split_bg(t):
@@ -206,38 +206,38 @@ def split_bg(t):
 
 
 def s4a_ov(img, t):
-    if t > 0.15:
+    if t > 0.1:
         pill(img, 270, 420, "小さめ", size=54, fg=WHITE, bg=(120, 120, 130), border=WHITE,
-             scale=ease_out_back((t - 0.15) / 0.3))
-    if t > 0.55:
+             scale=ease_out_back((t - 0.1) / 0.3))
+    if t > 0.3:
         pill(img, 810, 420, "しっかり", size=54, fg=WHITE, bg=ORANGE, border=WHITE,
-             scale=ease_out_back((t - 0.55) / 0.3))
+             scale=ease_out_back((t - 0.3) / 0.3))
     caption(img, t, [L([("比べて", BLACK)], 155),
-                     L([("みると…", BLACK)], 155, delay=0.2)], start=0.9)
+                     L([("みると…", BLACK)], 155, delay=0.15)], start=0.45)
 
 
-scene(2.8, split_bg, s4a_ov, sfx=[(0.15, "pop"), (0.55, "pop"), (0.9, "pop")])
+scene(2.0, split_bg, s4a_ov, sfx=[(0.15, "pop"), (0.55, "pop"), (0.9, "pop")])
 
 # 4b. Good pads close
 OKM = ok_mark(360, 40)
-c5 = Clip(BIG, 0.7, 1.35, speed=0.32, crop="760:1351:10:200")
+c5 = Clip(BIG, 0.7, 1.35, speed=0.4, crop="760:1351:10:200")
 scene(c5.n / FPS, lambda t: c5.next(),
       lambda img, t: sticker(img, t, OKM, 830, 500, 0.3, rot=0),
       lambda img, t: pill(img, 830, 720, "おすすめ！", size=64, fg=WHITE, bg=(60, 190, 120),
                           border=WHITE, scale=ease_out_back((t - 0.45) / 0.3)) if t > 0.45 else None,
       lambda img, t: caption(img, t, [
           L([("厚め", ORANGE), ("・", BLACK)], 160),
-          L([("ハードキャップ", ORANGE), ("！", BLACK)], 125, delay=0.3, marker=YELLOW)],
-          end=1.9),
+          L([("ハードキャップ", ORANGE), ("！", BLACK)], 125, delay=0.2, marker=YELLOW)],
+          end=1.5),
       lambda img, t: caption(img, t, [
           L([("覆う部分が", BLACK)], 155),
-          L([("大きい", CORAL), ("ものが", BLACK)], 150, delay=0.35),
-          L([("安心", CORAL)], 185, delay=0.7, marker=YELLOW)], start=1.95),
+          L([("大きい", CORAL), ("ものが", BLACK)], 150, delay=0.2),
+          L([("安心", CORAL)], 185, delay=0.4, marker=YELLOW)], start=1.55),
       sfx=[(0.12, "pop"), (0.3, "ding"), (0.42, "pop"), (1.95, "pop"), (2.3, "pop"),
            (2.65, "boing")])
 
 # 5. NG example
-c6 = Clip(SOFT, 0.0, 2.25, speed=0.45)
+c6 = Clip(SOFT, 0.0, 2.25, speed=0.6)
 
 
 def s5_ov(img, t):
@@ -247,18 +247,18 @@ def s5_ov(img, t):
              scale=ease_out_back((t - 0.35) / 0.3))
     caption(img, t, [
         L([("柔らかくて", BLACK)], 150),
-        L([("小さい", CORAL), ("タイプは", BLACK)], 135, delay=0.3),
-        L([("お勧めしません！", CORAL)], 120, delay=0.65, marker=YELLOW)], end=2.65)
+        L([("小さい", CORAL), ("タイプは", BLACK)], 135, delay=0.2),
+        L([("お勧めしません！", CORAL)], 120, delay=0.4, marker=YELLOW)], end=2.05)
     caption(img, t, [
         L([("安くても", BLACK), ("弱い", ORANGE), ("と", BLACK)], 135),
-        L([("守れない。", CORAL)], 175, delay=0.45, marker=YELLOW)], start=2.7)
+        L([("守れない。", CORAL)], 175, delay=0.3, marker=YELLOW)], start=2.1)
 
 
 scene(c6.n / FPS, lambda t: c6.next(), s5_ov,
       sfx=[(0.12, "pop"), (0.25, "buzz"), (0.42, "pop"), (0.77, "pop"), (2.7, "pop"), (3.15, "pop")])
 
 # 6. Wrist guard (fast-forward)
-c7 = Clip(WRIST, 0.0, 11.2, speed=1.8, crop="608:1080:656:0")
+c7 = Clip(WRIST, 0.7, 10.5, speed=1.5, crop="608:1080:656:0")
 FF = ff_badge()
 WR_SHIFT = 630  # move footage up so the wrist/strap stays clear of the captions
 
@@ -266,7 +266,13 @@ WR_SHIFT = 630  # move footage up so the wrist/strap stays clear of the captions
 def wrist_bg(t):
     fr = c7.next()
     img = Image.new("RGB", (W, H))
-    img.paste(fr.crop((0, WR_SHIFT, W, H)), (0, 0))
+    top = H - WR_SHIFT
+    # blurred fill behind, whole frame (zoomed out) on top
+    bgf = fr.resize((W // 10, top // 10)).filter(ImageFilter.GaussianBlur(3)).resize((W, top))
+    bgf = Image.blend(bgf, Image.new("RGB", (W, top), (40, 30, 25)), 0.25)
+    img.paste(bgf, (0, 0))
+    fw = int(top * W / H)
+    img.paste(fr.resize((fw, top), Image.BILINEAR), ((W - fw) // 2, 0))
     img.paste(CREAM_BG.crop((0, H - WR_SHIFT, W, H)), (0, H - WR_SHIFT))
     d = ImageDraw.Draw(img)
     d.rectangle([0, H - WR_SHIFT - 6, W, H - WR_SHIFT + 6], fill=WHITE)
@@ -285,7 +291,7 @@ scene(c7.n / FPS, wrist_bg,
 ICONS = [shop_icon(k, 150).resize((180, 180), Image.LANCZOS) for k in range(3)]
 ROWS = ["プロショップ", "大型\nスポーツショップ", "ネットフリマ"]
 ROW_COL = [CORAL, (70, 150, 230), (60, 180, 120)]
-ROW_T = [1.0, 1.8, 2.6]
+ROW_T = [0.6, 1.1, 1.6]
 
 
 def row_card(i):
@@ -330,13 +336,13 @@ def s7_ov(img, t):
     decor_stars(img, t, [(130, 1720, 40, 0), (950, 1740, 34, 2)])
 
 
-scene(5.4, lambda t: CREAM_BG.copy(), s7_ov, tag=False,
+scene(3.6, lambda t: CREAM_BG.copy(), s7_ov, tag=False,
       sfx=[(0.0, "whoosh"), (0.1, "pop")] + [(x, "ding") for x in ROW_T])
 
 # 8. You don't need to spend much (card)
 COIN = coin(72)
 random.seed(4)
-COINS = [(random.uniform(150, 930), random.uniform(1.3, 2.2), random.uniform(-30, 30),
+COINS = [(random.uniform(150, 930), random.uniform(0.9, 1.6), random.uniform(-30, 30),
           random.uniform(1380, 1560)) for _ in range(9)]
 
 
@@ -362,27 +368,27 @@ def s8_ov(img, t):
                     anim="drop")
     draw_text_block(img, [
         L([("お金", ORANGE), ("をかける", BLACK)], 145),
-        L([("必要は", BLACK)], 160, delay=0.3),
-        L([("ありません！", CORAL)], 150, delay=0.7, marker=YELLOW)],
-        t, 0.55, W / 2, cy_top=600, maxw=980, scale=0.88)
+        L([("必要は", BLACK)], 160, delay=0.2),
+        L([("ありません！", CORAL)], 150, delay=0.45, marker=YELLOW)],
+        t, 0.35, W / 2, cy_top=600, maxw=980, scale=0.88)
     decor_stars(img, t, [(140, 330, 42, 0), (950, 420, 36, 1), (930, 1200, 30, 2)])
 
 
-scene(4.2, lambda t: MINT_BG.copy(), s8_ov, tag=False,
+scene(3.0, lambda t: MINT_BG.copy(), s8_ov, tag=False,
       sfx=[(0.0, "whoosh"), (0.1, "pop"), (0.55, "pop"), (0.85, "pop"), (1.25, "boing")]
       + [(c[1] + 0.3, "coin") for c in COINS[::2]])
 
 # 9. Closing
-c9 = Clip(HOOK, 3.6, 2.09, speed=0.42)
+c9 = Clip(HOOK, 3.6, 2.09, speed=0.63)
 scene(c9.n / FPS, lambda t: c9.next(),
       lambda img, t: caption(img, t, [
           L([("プロテクターは、", BLACK)], 120),
-          L([("思いきり", ORANGE)], 165, delay=0.4)], end=2.2),
+          L([("思いきり", ORANGE)], 165, delay=0.3)], end=1.55),
       lambda img, t: caption(img, t, [
           L([("練習するための", BLACK)], 135),
-          L([("道具！", CORAL)], 195, delay=0.45, marker=YELLOW)], start=2.25),
+          L([("道具！", CORAL)], 195, delay=0.3, marker=YELLOW)], start=1.6),
       lambda img, t: decor_stars(img, t, [(150, 880, 38, 0), (930, 840, 32, 2)])
-      if t > 2.7 else None,
+      if t > 1.9 else None,
       sfx=[(0.12, "pop"), (0.52, "pop"), (2.25, "pop"), (2.7, "boing")])
 
 # 10. Next time: helmet
@@ -402,14 +408,14 @@ def s10_ov(img, t):
     draw_text_block(img, [
         L([("ヘルメット", CORAL), ("編", BLACK)], 150, marker=YELLOW),
         L([("お楽しみに！", ORANGE)], 140, delay=0.4)],
-        t, 0.5, W / 2, cy_top=1040, maxw=980, scale=0.88)
-    if t > 1.3:
+        t, 0.3, W / 2, cy_top=1040, maxw=980, scale=0.88)
+    if t > 0.9:
         pill(img, W / 2, 1640, "フォローして待っててね", size=50, fg=BROWN,
-             scale=ease_out_back((t - 1.3) / 0.35))
+             scale=ease_out_back((t - 0.9) / 0.35))
     decor_stars(img, t, [(160, 560, 40, 0), (930, 560, 36, 1.5)])
 
 
-scene(3.4, lambda t: CREAM_BG.copy(), s10_ov, tag=False,
+scene(2.7, lambda t: CREAM_BG.copy(), s10_ov, tag=False,
       sfx=[(0.0, "whoosh"), (0.15, "boing"), (0.5, "pop"), (0.9, "pop"), (1.3, "ding")])
 
 # ---------------------------------------------------------------- render
