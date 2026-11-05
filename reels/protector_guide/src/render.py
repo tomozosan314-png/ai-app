@@ -448,6 +448,82 @@ def s10_ov(img, t):
 scene(2.7, lambda t: CREAM_BG.copy(), s10_ov, tag=False,
       sfx=[(0.0, "whoosh"), (0.15, "boing"), (0.5, "pop"), (0.9, "pop"), (1.3, "ding")])
 
+# 11. Closing card in the style of the shop's chicken notice
+CHICK_SRC = UP + "eddc9882-image.jpg"
+END_BG = (254, 253, 249)
+END_RED = (196, 88, 72)
+END_INK = (58, 44, 38)
+
+
+def _end_card_base():
+    img = Image.new("RGB", (W, H), END_BG)
+    src = Image.open(CHICK_SRC).convert("RGB")
+    top = src.crop((0, 0, src.width, 476))
+    th = int(476 * W / src.width)
+    top = top.resize((W, th), Image.LANCZOS).filter(
+        ImageFilter.UnsharpMask(radius=2, percent=80, threshold=2))
+    img.paste(top, (0, 0))
+    d = ImageDraw.Draw(img)
+    # soft corner blobs at the bottom
+    d.ellipse([-260, 1640, 330, 2140], fill=(242, 224, 184))
+    d.ellipse([760, 1700, 1340, 2200], fill=(232, 195, 179))
+    for (x0, y0, x1, y1) in [(60, 1800, 90, 1770), (110, 1830, 150, 1810),
+                             (960, 1830, 990, 1800), (1010, 1860, 1045, 1840)]:
+        d.line([(x0, y0), (x1, y1)], fill=WHITE, width=10)
+    # yellow wavy blob behind the headline
+    blob = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    bd = ImageDraw.Draw(blob)
+    col = (250, 236, 199, 255)
+    bd.rounded_rectangle([40, 1040, W - 40, 1380], radius=120, fill=col)
+    for k in range(7):
+        cx = 120 + k * 140
+        bd.ellipse([cx - 110, 1000 + (k % 2) * 20, cx + 110, 1150 + (k % 2) * 20], fill=col)
+        bd.ellipse([cx - 110, 1280 - (k % 2) * 20, cx + 110, 1420 - (k % 2) * 20], fill=col)
+    img = Image.alpha_composite(img.convert("RGBA"), blob).convert("RGB")
+    d = ImageDraw.Draw(img)
+    # dotted separators for the small lines
+    for y in (1572, 1682):
+        for x in range(150, 940, 22):
+            d.ellipse([x - 4, y - 4, x + 4, y + 4], fill=(225, 205, 170))
+    return img
+
+
+END_BASE = _end_card_base()
+
+
+def _line_sprite(segs, size):
+    f = font(ROUND, size)
+    w = sum(f.getlength(t) for t, c in segs)
+    sp = Image.new("RGBA", (int(w + 20), int(size * 1.5)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(sp)
+    x = 10
+    for t, c in segs:
+        d.text((x, size * 0.75), t, font=f, fill=c, anchor="lm")
+        x += f.getlength(t)
+    return sp
+
+
+END_LINES = [
+    (_line_sprite([("コメント・DM", END_RED)], 112), 1140, 0.15),
+    (_line_sprite([("お待ちしてます！", END_INK)], 100), 1290, 0.4),
+    (_line_sprite([("分からないことがあれば、", END_INK)], 58), 1520, 0.8),
+    (_line_sprite([("お気軽にどうぞ♪", END_INK)], 58), 1630, 1.0),
+]
+
+
+def s11_ov(img, t):
+    for spr, y, t0 in END_LINES:
+        lt = t - t0
+        if lt > 0:
+            paste_scaled(img, spr, W / 2, y, ease_out_back(lt / 0.3, 1.4), clamp(lt / 0.1))
+    p = ease_out_cubic((t - 0.6) / 0.35)
+    if p > 0:
+        d = ImageDraw.Draw(img)
+        d.rounded_rectangle([160, 1372, 160 + 760 * p, 1386], radius=7, fill=WHITE)
+
+
+scene(3.4, lambda t: END_BASE.copy(), s11_ov, punch_in=False)
+
 # ---------------------------------------------------------------- render
 total = sum(s["dur"] for s in scenes)
 print(f"scenes={len(scenes)} total={total:.2f}s", file=sys.stderr)
