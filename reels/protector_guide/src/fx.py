@@ -63,9 +63,14 @@ def glyph(ch, size, color, stroke_ratio=0.17, fontpath=POP, shadow=True):
                                 stroke_fill=(40, 25, 15, 150))
         sh = sh.filter(ImageFilter.GaussianBlur(size * 0.04))
         img.alpha_composite(sh)
-    ImageDraw.Draw(img).text((pad, y0), ch, font=f, fill=color,
+    ImageDraw.Draw(img).text((pad, y0), ch, font=f, fill=WHITE,
                              stroke_width=sw, stroke_fill=WHITE)
-    return img, pad, adv
+    fill = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ImageDraw.Draw(fill).text((pad, y0), ch, font=f, fill=color)
+    return img, fill, pad, adv
+
+
+TRACK = 0.06  # letter spacing (ratio of font size)
 
 
 def layout_line(segs, size, maxw, fontpath=POP):
@@ -79,7 +84,8 @@ def layout_line(segs, size, maxw, fontpath=POP):
             f = font(fontpath, s)
             for ch in text:
                 items.append((ch, s, color, x))
-                x += f.getlength(ch)
+                x += f.getlength(ch) + s * TRACK
+        x -= s * TRACK if items else 0
         if x <= maxw or size < 30:
             return items, x, size
         size = int(size * 0.95)
@@ -103,7 +109,7 @@ def paste_scaled(dst, spr, cx, cy, scale, alpha=1.0, rot=0.0):
 
 
 def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
-                    maxw=900, stagger=0.035, gap=1.72, end=None,
+                    maxw=900, stagger=0.035, gap=1.5, end=None,
                     fontpath=POP, anim="pop", marker=None, align="center"):
     """Animated multi-line text.
 
@@ -140,24 +146,24 @@ def draw_text_block(img, lines, t, start, cx, cy_bottom=None, cy_top=None,
                 d.rounded_rectangle([x0 - 10, my, x0 - 10 + (w + 20) * p,
                                      my + mh], radius=int(mh / 2),
                                     fill=mk + (int(235 * out_a),))
-        for i, (ch, s, color, x) in enumerate(items):
-            lt = t - ls - i * stagger
-            if lt < 0:
-                continue
-            spr, pad, adv = glyph(ch, s, color, fontpath=fontpath)
-            if anim == "pop":
-                sc = ease_out_back(lt / 0.28)
-                dy = 0
-            elif anim == "drop":
-                sc = 1.0
-                dy = -60 * (1 - ease_out_back(lt / 0.32))
-            else:
-                sc = 1.0
-                dy = 0
-            a = clamp(lt / 0.08) * out_a
-            ccx = x0 + x + adv / 2
-            # spr centre maps to glyph centre approx
-            paste_scaled(img, spr, ccx, base + dy, sc, a)
+        for layer in (0, 1):  # 0: outlines/shadows, 1: fills (never covered)
+            for i, (ch, s, color, x) in enumerate(items):
+                lt = t - ls - i * stagger
+                if lt < 0:
+                    continue
+                spr_o, spr_f, pad, adv = glyph(ch, s, color, fontpath=fontpath)
+                if anim == "pop":
+                    sc = ease_out_back(lt / 0.28, 1.4)
+                    dy = 0
+                elif anim == "drop":
+                    sc = 1.0
+                    dy = -60 * (1 - ease_out_back(lt / 0.32))
+                else:
+                    sc = 1.0
+                    dy = 0
+                a = clamp(lt / 0.08) * out_a
+                ccx = x0 + x + adv / 2
+                paste_scaled(img, spr_f if layer else spr_o, ccx, base + dy, sc, a)
         y += lh
 
 

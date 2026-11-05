@@ -24,8 +24,8 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else "video.mp4"
 PREVIEW = "--preview" in sys.argv
 
 CAP_BOTTOM = 1590   # captions are pinned to the lower area (above IG UI)
-CAP_X = 530
-CAP_W = 920
+CAP_X = 540
+CAP_W = 980
 
 events = []  # (time, kind) for the audio pass
 
@@ -92,7 +92,7 @@ def L(segs, size=88, delay=0.0, marker=None):
 
 
 def caption(img, t, lines, start=0.12, end=None, **kw):
-    lines = [dict(l, size=int(l["size"] * 1.12)) for l in lines]
+    lines = [dict(l) for l in lines]
     draw_text_block(img, lines, t, start, CAP_X, cy_bottom=CAP_BOTTOM, maxw=CAP_W,
                     end=end, **kw)
 
@@ -146,18 +146,20 @@ def scene(dur, bg, *ov, punch_in=True, tag=True, sfx=None):
 c1 = Clip(HOOK, 2.6, 3.09)
 scene(3.1, lambda t: c1.next(),
       lambda img, t: caption(img, t, [
-          L([("プロテクター、", BLACK)], 96),
-          L([("なんとなく", ORANGE, 1.1), ("で", BLACK), ("選んでない？", BLACK)], 84,
+          L([("プロテクター、", BLACK)], 140),
+          L([("なんとなく", ORANGE), ("で", BLACK)], 150, delay=0.35),
+          L([("選んでない？", BLACK)], 150,
             delay=0.45, marker=YELLOW)]),
-      lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 900, 930, 1.0, rot=-12),
+      lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 890, 740, 1.1, rot=-12),
       sfx=[(0.12, "pop"), (0.57, "pop"), (1.0, "boing")])
 
 # 2a. Mini-ramp falls
 c2 = Clip(KIDFALL, 0.0, 2.45, speed=0.75)
 scene(c2.n / FPS, lambda t: c2.next(),
       lambda img, t: caption(img, t, [
-          L([("ミニランプ", ORANGE), ("特有の", BLACK)], 92),
-          L([("転び方は…？", BLACK)], 92, delay=0.4)]),
+          L([("ミニランプ", ORANGE)], 160),
+          L([("特有の", BLACK)], 150, delay=0.3),
+          L([("転び方は…？", BLACK)], 150, delay=0.6)]),
       sfx=[(0.12, "pop"), (0.52, "pop")])
 
 # 2b. Knee slide = fall onto knees
@@ -166,8 +168,8 @@ scene(c3.n / FPS, lambda t: c3.next(),
       lambda img, t: sticker(img, t, text_sprite("ズザーッ！", 120, ORANGE), 560, 760, 0.25,
                              rot=-10),
       lambda img, t: caption(img, t, [
-          L([("ニースライド", CORAL, 1.2)], 104, marker=YELLOW),
-          L([("＝", BLACK), ("膝", ORANGE, 1.25), ("から転ぶ！", BLACK)], 92, delay=0.55)]),
+          L([("ニースライド", CORAL)], 155, marker=YELLOW),
+          L([("＝", BLACK), ("膝", ORANGE), ("から転ぶ！", BLACK)], 140, delay=0.55)]),
       sfx=[(0.25, "whoosh"), (0.12, "pop"), (0.67, "pop")])
 
 # 3. "Lifeline" text card (no illustration)
@@ -179,10 +181,10 @@ def s3_ov(img, t):
     decor_stars(img, t, [(150, 420, 44, 0), (930, 380, 38, 1.5), (140, 1500, 36, 3),
                          (940, 1460, 42, 2)])
     draw_text_block(img, [
-        L([("だから", BLACK)], 110),
-        L([("膝パッド", ORANGE), ("が", BLACK)], 150, delay=0.35),
-        L([("“命綱”！", CORAL)], 200, delay=0.85, marker=YELLOW)],
-        t, 0.1, W / 2, cy_top=540, maxw=960)
+        L([("だから", BLACK)], 150),
+        L([("膝パッド", ORANGE), ("が", BLACK)], 175, delay=0.35),
+        L([("“命綱”！", CORAL)], 215, delay=0.85, marker=YELLOW)],
+        t, 0.1, W / 2, cy_top=500, maxw=980)
 
 
 scene(3.4, lambda t: CREAM_BG.copy(), s3_ov,
@@ -209,24 +211,29 @@ def s4a_ov(img, t):
     if t > 0.55:
         pill(img, 810, 420, "しっかり", size=54, fg=WHITE, bg=ORANGE, border=WHITE,
              scale=ease_out_back((t - 0.55) / 0.3))
-    caption(img, t, [L([("比べてみると…", BLACK)], 96)], start=0.9)
+    caption(img, t, [L([("比べて", BLACK)], 155),
+                     L([("みると…", BLACK)], 155, delay=0.2)], start=0.9)
 
 
 scene(2.8, split_bg, s4a_ov, sfx=[(0.15, "pop"), (0.55, "pop"), (0.9, "pop")])
 
 # 4b. Good pads close
-c5 = Clip(BIG, 0.7, 1.35, speed=0.37, crop="760:1351:10:200")
+c5 = Clip(BIG, 0.7, 1.35, speed=0.32, crop="760:1351:10:200")
 scene(c5.n / FPS, lambda t: c5.next(),
       lambda img, t: sticker(img, t, ok_mark(200), 900, 420, 0.3, rot=0),
       lambda img, t: caption(img, t, [
-          L([("厚め", ORANGE), ("・", BLACK), ("ハードキャップ", ORANGE), ("！", BLACK)], 92,
-            marker=YELLOW),
-          L([("覆う部分が", BLACK)], 84, delay=1.1),
-          L([("大きい", CORAL, 1.15), ("ものが", BLACK), ("安心", CORAL, 1.15)], 84, delay=1.4)]),
-      sfx=[(0.12, "pop"), (0.3, "ding"), (1.22, "pop"), (1.52, "pop")])
+          L([("厚め", ORANGE), ("・", BLACK)], 160),
+          L([("ハードキャップ", ORANGE), ("！", BLACK)], 125, delay=0.3, marker=YELLOW)],
+          end=1.9),
+      lambda img, t: caption(img, t, [
+          L([("覆う部分が", BLACK)], 155),
+          L([("大きい", CORAL), ("ものが", BLACK)], 150, delay=0.35),
+          L([("安心", CORAL)], 185, delay=0.7, marker=YELLOW)], start=1.95),
+      sfx=[(0.12, "pop"), (0.3, "ding"), (0.42, "pop"), (1.95, "pop"), (2.3, "pop"),
+           (2.65, "boing")])
 
 # 5. NG example
-c6 = Clip(SOFT, 0.0, 2.25, speed=0.5)
+c6 = Clip(SOFT, 0.0, 2.25, speed=0.45)
 
 
 def s5_ov(img, t):
@@ -235,15 +242,16 @@ def s5_ov(img, t):
         pill(img, 820, 760, "NG", size=60, fg=WHITE, bg=CORAL, border=WHITE,
              scale=ease_out_back((t - 0.35) / 0.3))
     caption(img, t, [
-        L([("柔らかくて", BLACK), ("小さい", CORAL), ("タイプは", BLACK)], 84),
-        L([("お勧めしません！", CORAL)], 100, delay=0.5, marker=YELLOW)], end=2.4)
+        L([("柔らかくて", BLACK)], 150),
+        L([("小さい", CORAL), ("タイプは", BLACK)], 135, delay=0.3),
+        L([("お勧めしません！", CORAL)], 120, delay=0.65, marker=YELLOW)], end=2.65)
     caption(img, t, [
-        L([("安くても", BLACK), ("弱い", ORANGE), ("と", BLACK)], 92),
-        L([("守れない。", CORAL)], 120, delay=0.45, marker=YELLOW)], start=2.45)
+        L([("安くても", BLACK), ("弱い", ORANGE), ("と", BLACK)], 135),
+        L([("守れない。", CORAL)], 175, delay=0.45, marker=YELLOW)], start=2.7)
 
 
 scene(c6.n / FPS, lambda t: c6.next(), s5_ov,
-      sfx=[(0.12, "pop"), (0.25, "buzz"), (0.62, "pop"), (2.45, "pop"), (2.9, "pop")])
+      sfx=[(0.12, "pop"), (0.25, "buzz"), (0.42, "pop"), (0.77, "pop"), (2.7, "pop"), (3.15, "pop")])
 
 # 6. Wrist guard (fast-forward)
 c7 = Clip(WRIST, 0.0, 11.2, speed=2.5, crop="608:1080:656:0")
@@ -251,8 +259,9 @@ FF = ff_badge()
 scene(c7.n / FPS, lambda t: c7.next(),
       lambda img, t: sticker(img, t, FF, 840, 380, 0.1, wobble=False),
       lambda img, t: caption(img, t, [
-          L([("肘", ORANGE, 1.15), ("・", BLACK), ("手首", ORANGE, 1.15), ("も", BLACK)], 96),
-          L([("セットで", BLACK), ("安心！", CORAL, 1.15)], 96, delay=0.45, marker=YELLOW)],
+          L([("肘", ORANGE), ("・", BLACK), ("手首", ORANGE), ("も", BLACK)], 160),
+          L([("セットで", BLACK)], 160, delay=0.35),
+          L([("安心！", CORAL)], 180, delay=0.7, marker=YELLOW)],
           start=0.35),
       sfx=[(0.1, "whoosh"), (0.35, "pop"), (0.8, "pop")])
 
@@ -333,13 +342,13 @@ def s8_ov(img, t):
             if v * u - 0.5 * g * u * u < 0:
                 y = ground
         paste_scaled(img, COIN, x, y, 1.0, 1.0, rot + lt * 60 * (1 if lt < tf else 0))
-    draw_text_block(img, [L([("でも、", BLACK)], 120)], t, 0.1, W / 2, cy_top=360, maxw=900,
+    draw_text_block(img, [L([("でも、", BLACK)], 160)], t, 0.1, W / 2, cy_top=280, maxw=980,
                     anim="drop")
     draw_text_block(img, [
-        L([("お金", ORANGE, 1.15), ("をかける", BLACK)], 104),
-        L([("必要は", BLACK)], 104, delay=0.3),
+        L([("お金", ORANGE), ("をかける", BLACK)], 145),
+        L([("必要は", BLACK)], 160, delay=0.3),
         L([("ありません！", CORAL)], 150, delay=0.7, marker=YELLOW)],
-        t, 0.55, W / 2, cy_top=620, maxw=940)
+        t, 0.55, W / 2, cy_top=560, maxw=980)
     decor_stars(img, t, [(140, 330, 42, 0), (950, 420, 36, 1), (930, 1200, 30, 2)])
 
 
@@ -348,15 +357,17 @@ scene(4.2, lambda t: MINT_BG.copy(), s8_ov, tag=False,
       + [(c[1] + 0.3, "coin") for c in COINS[::2]])
 
 # 9. Closing
-c9 = Clip(HOOK, 3.6, 2.09, speed=0.5)
+c9 = Clip(HOOK, 3.6, 2.09, speed=0.42)
 scene(c9.n / FPS, lambda t: c9.next(),
       lambda img, t: caption(img, t, [
-          L([("プロテクターは、", BLACK)], 88),
-          L([("思いきり", ORANGE, 1.15), ("練習するための", BLACK)], 84, delay=0.45),
-          L([("道具！", CORAL)], 140, delay=1.0, marker=YELLOW)]),
-      lambda img, t: decor_stars(img, t, [(150, 1000, 38, 0), (930, 960, 32, 2)])
-      if t > 1.3 else None,
-      sfx=[(0.12, "pop"), (0.57, "pop"), (1.12, "boing")])
+          L([("プロテクターは、", BLACK)], 120),
+          L([("思いきり", ORANGE)], 165, delay=0.4)], end=2.2),
+      lambda img, t: caption(img, t, [
+          L([("練習するための", BLACK)], 135),
+          L([("道具！", CORAL)], 195, delay=0.45, marker=YELLOW)], start=2.25),
+      lambda img, t: decor_stars(img, t, [(150, 880, 38, 0), (930, 840, 32, 2)])
+      if t > 2.7 else None,
+      sfx=[(0.12, "pop"), (0.52, "pop"), (2.25, "pop"), (2.7, "boing")])
 
 # 10. Next time: helmet
 HELM = helmet(440)
@@ -373,11 +384,11 @@ def s10_ov(img, t):
     pill(img, W / 2, 380, "次回予告", size=60, fg=WHITE, bg=NAVY, border=WHITE,
          scale=ease_out_back(t / 0.3))
     draw_text_block(img, [
-        L([("ヘルメット", CORAL), ("編", BLACK)], 140, marker=YELLOW),
-        L([("お楽しみに！", ORANGE)], 100, delay=0.4)],
-        t, 0.5, W / 2, cy_top=1060, maxw=940)
+        L([("ヘルメット", CORAL), ("編", BLACK)], 150, marker=YELLOW),
+        L([("お楽しみに！", ORANGE)], 140, delay=0.4)],
+        t, 0.5, W / 2, cy_top=1040, maxw=980)
     if t > 1.3:
-        pill(img, W / 2, 1520, "フォローして待っててね", size=50, fg=BROWN,
+        pill(img, W / 2, 1640, "フォローして待っててね", size=50, fg=BROWN,
              scale=ease_out_back((t - 1.3) / 0.35))
     decor_stars(img, t, [(160, 560, 40, 0), (930, 560, 36, 1.5)])
 
