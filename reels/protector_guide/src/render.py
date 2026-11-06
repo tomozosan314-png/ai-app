@@ -318,34 +318,34 @@ scene(c7.n / FPS, wrist_bg,
       sfx=[(0.1, "whoosh"), (0.35, "pop"), (0.8, "pop")])
 
 # 7. Where to buy (card)
-ICONS = [shop_icon(k, 150).resize((180, 180), Image.LANCZOS) for k in range(3)]
-ROWS = ["プロショップ", "大型\nスポーツショップ", "ネットフリマ"]
-ROW_COL = [CORAL, (70, 150, 230), (60, 180, 120)]
-ROW_T = [0.6, 1.1, 1.6]
+ICONS = [shop_icon(k, 150).resize((160, 160), Image.LANCZOS) for k in (0, 1, 3, 2)]
+ROWS = ["プロショップ", "大型\nスポーツショップ", "ネット通販", "ネットフリマ"]
+ROW_COL = [CORAL, (70, 150, 230), (245, 160, 40), (60, 180, 120)]
+ROW_T = [0.5, 0.9, 1.3, 1.7]
 
 
 def row_card(i):
-    w, h = 920, 250
+    w, h = 920, 210
     s = Image.new("RGBA", (w + 20, h + 24), (0, 0, 0, 0))
     d = ImageDraw.Draw(s)
     d.rounded_rectangle([10, 18, w + 10, h + 18], radius=50, fill=(200, 160, 110, 120))
     d.rounded_rectangle([6, 6, w + 6, h + 6], radius=50, fill=WHITE, outline=BROWN, width=6)
     cx, cy = 100, h / 2 + 6
-    d.ellipse([cx - 64, cy - 64, cx + 64, cy + 64], fill=ROW_COL[i], outline=BROWN, width=5)
-    d.text((cx, cy + 2), str(i + 1), font=font(POP, 78), fill=WHITE, anchor="mm")
-    s.alpha_composite(ICONS[i], (185, int(cy - 90)))
+    d.ellipse([cx - 56, cy - 56, cx + 56, cy + 56], fill=ROW_COL[i], outline=BROWN, width=5)
+    d.text((cx, cy + 2), str(i + 1), font=font(POP, 68), fill=WHITE, anchor="mm")
+    s.alpha_composite(ICONS[i], (185, int(cy - 80)))
     parts = ROWS[i].split("\n")
     if len(parts) == 1:
-        items, tw, sz = layout_line([(parts[0], BLACK)], 84, 530)
-        d.text((385, cy + 4), parts[0], font=font(POP, sz), fill=BLACK, anchor="lm")
+        items, tw, sz = layout_line([(parts[0], BLACK)], 80, 530, POP)
+        d.text((375, cy + 4), parts[0], font=font(POP, sz), fill=BLACK, anchor="lm")
     else:
-        d.text((385, cy - 40), parts[0], font=font(POP, 62), fill=BLACK, anchor="lm")
-        items, tw, sz = layout_line([(parts[1], BLACK)], 72, 530)
-        d.text((385, cy + 42), parts[1], font=font(POP, sz), fill=BLACK, anchor="lm")
+        d.text((375, cy - 36), parts[0], font=font(POP, 56), fill=BLACK, anchor="lm")
+        items, tw, sz = layout_line([(parts[1], BLACK)], 68, 530, POP)
+        d.text((375, cy + 38), parts[1], font=font(POP, sz), fill=BLACK, anchor="lm")
     return s
 
 
-ROW_SPR = [row_card(i) for i in range(3)]
+ROW_SPR = [row_card(i) for i in range(4)]
 
 
 def s7_ov(img, t):
@@ -354,19 +354,19 @@ def s7_ov(img, t):
     if p > 0:
         burst(d, W / 2, 400, 330 * p, 400 * p, [190, 205, 220, -10, -25, -40], 14, ORANGE)
     draw_text_block(img, [
-        L([("買う場所は", BLACK), ("3つ", CORAL, 1.45)], 120, marker=YELLOW)],
+        L([("買う場所は", BLACK), ("4つ", CORAL, 1.45)], 120, marker=YELLOW)],
         t, 0.1, W / 2, cy_top=310, maxw=920)
-    for i in range(3):
+    for i in range(4):
         lt = t - ROW_T[i]
         if lt < 0:
             continue
         e = ease_out_back(lt / 0.42, 1.8)
         x = W / 2 + (1 - e) * 700
-        paste_scaled(img, ROW_SPR[i], x, 820 + i * 330, 1.0, clamp(lt / 0.12))
-    decor_stars(img, t, [(130, 1720, 40, 0), (950, 1740, 34, 2)])
+        paste_scaled(img, ROW_SPR[i], x, 720 + i * 255, 1.0, clamp(lt / 0.12))
+    decor_stars(img, t, [(130, 1760, 36, 0), (950, 1770, 30, 2)])
 
 
-scene(3.6, lambda t: CREAM_BG.copy(), s7_ov, tag=False,
+scene(4.0, lambda t: CREAM_BG.copy(), s7_ov, tag=False,
       sfx=[(0.0, "whoosh"), (0.1, "pop")] + [(x, "ding") for x in ROW_T])
 
 # 8. You don't need to spend much (card)
@@ -421,32 +421,87 @@ scene(c9.n / FPS, lambda t: c9.next(),
       if t > 1.9 else None,
       sfx=[(0.12, "pop"), (0.52, "pop"), (2.25, "pop"), (2.7, "boing")])
 
-# 10. Next time: helmet
-HELM = helmet(440)
+# 10. Next time: helmet (clean, editorial look)
+HELM = helmet(400, straps=False)
+NX_BG = (250, 246, 238)
+NX_INK = (52, 44, 40)
+NX_ACC = (226, 96, 78)
+
+
+def _nx_base():
+    img = Image.new("RGB", (W, H), NX_BG)
+    d = ImageDraw.Draw(img)
+    # soft accent shapes
+    d.ellipse([190, 430, 890, 1130], fill=(247, 222, 212))
+    d.ellipse([-180, 1560, 260, 2000], fill=(236, 230, 214))
+    d.ellipse([840, -160, 1260, 260], fill=(236, 230, 214))
+    # thin frame
+    d.rectangle([56, 56, W - 56, H - 56], outline=(210, 196, 176), width=3)
+    return img
+
+
+NX_BASE = _nx_base()
+
+
+def _spaced(text, size, color, track, fp=GOTH):
+    f = font(fp, size)
+    w = sum(f.getlength(c) for c in text) + track * (len(text) - 1)
+    sp = Image.new("RGBA", (int(w + 20), int(size * 1.5)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(sp)
+    x = 10
+    for c in text:
+        d.text((x, size * 0.75), c, font=f, fill=color, anchor="lm")
+        x += f.getlength(c) + track
+    return sp
+
+
+NX_NEXT = _spaced("NEXT", 64, NX_ACC, 26)
+NX_SMALL = _spaced("次回は", 58, NX_INK, 10)
+NX_BIG = _spaced("ヘルメット編", 150, NX_INK, 6)
+NX_SOON = _spaced("お楽しみに", 52, NX_ACC, 18)
+NX_FOLLOW = _spaced("フォローして待っててね", 40, NX_INK, 4)
+
+
+def _rise(img, spr, y, t, t0, dist=40):
+    lt = t - t0
+    if lt <= 0:
+        return
+    e = ease_out_cubic(lt / 0.45)
+    paste_scaled(img, spr, W / 2, y + dist * (1 - e), 1.0, e)
 
 
 def s10_ov(img, t):
     d = ImageDraw.Draw(img)
+    # NEXT with lines either side
+    e = ease_out_cubic((t - 0.05) / 0.5)
+    if e > 0:
+        half = NX_NEXT.width / 2
+        d.line([(W / 2 - half - 30 - 150 * e, 290), (W / 2 - half - 30, 290)], fill=NX_ACC, width=4)
+        d.line([(W / 2 + half + 30, 290), (W / 2 + half + 30 + 150 * e, 290)], fill=NX_ACC, width=4)
+    _rise(img, NX_NEXT, 290, t, 0.05, 20)
     lt = t - 0.15
     if lt > 0:
-        y = 760 - 40 * abs(math.sin(lt * 4)) * max(0, 1 - lt / 2)
-        paste_scaled(img, HELM, W / 2, y, ease_out_back(lt / 0.4, 2.0), 1.0,
-                     4 * math.sin(lt * 3))
-        burst(d, W / 2, 760, 270, 340, [200, 220, 240, -20, -40, -60, 300, 320, 340], 12, YELLOW)
-    pill(img, W / 2, 380, "次回予告", size=60, fg=WHITE, bg=NAVY, border=WHITE,
-         scale=ease_out_back(t / 0.3))
-    draw_text_block(img, [
-        L([("ヘルメット", CORAL), ("編", BLACK)], 150, marker=YELLOW),
-        L([("お楽しみに！", ORANGE)], 140, delay=0.4)],
-        t, 0.3, W / 2, cy_top=1040, maxw=980, scale=0.88)
-    if t > 0.9:
-        pill(img, W / 2, 1640, "フォローして待っててね", size=50, fg=BROWN,
-             scale=ease_out_back((t - 0.9) / 0.35))
-    decor_stars(img, t, [(160, 560, 40, 0), (930, 560, 36, 1.5)])
+        e = ease_out_cubic(lt / 0.5)
+        y = 790 + 60 * (1 - e) + 12 * math.sin(lt * 2.6)
+        paste_scaled(img, HELM, W / 2, y, 0.9 + 0.1 * e, e, -4 + 2 * math.sin(lt * 2))
+    _rise(img, NX_SMALL, 1220, t, 0.35)
+    _rise(img, NX_BIG, 1350, t, 0.5)
+    e = ease_out_cubic((t - 0.8) / 0.5)
+    if e > 0:
+        d.line([(W / 2 - 200 * e, 1460), (W / 2 + 200 * e, 1460)], fill=NX_INK, width=3)
+    _rise(img, NX_SOON, 1540, t, 0.9, 20)
+    lt = t - 1.15
+    if lt > 0:
+        e = ease_out_cubic(lt / 0.4)
+        bw, bh = NX_FOLLOW.width + 50, 84
+        box = Image.new("RGBA", (bw, bh), (0, 0, 0, 0))
+        ImageDraw.Draw(box).rounded_rectangle([2, 2, bw - 3, bh - 3], radius=bh // 2,
+                                              fill=WHITE, outline=NX_INK, width=3)
+        box.alpha_composite(NX_FOLLOW, (25, int(bh / 2 - NX_FOLLOW.height / 2)))
+        paste_scaled(img, box, W / 2, 1670 + 20 * (1 - e), 1.0, e)
 
 
-scene(2.7, lambda t: CREAM_BG.copy(), s10_ov, tag=False,
-      sfx=[(0.0, "whoosh"), (0.15, "boing"), (0.5, "pop"), (0.9, "pop"), (1.3, "ding")])
+scene(2.9, lambda t: NX_BASE.copy(), s10_ov, punch_in=False)
 
 # 11. Closing card in the style of the shop's chicken notice
 CHICK_SRC = UP + "eddc9882-image.jpg"

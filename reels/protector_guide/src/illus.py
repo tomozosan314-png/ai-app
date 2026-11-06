@@ -156,6 +156,19 @@ def shop_icon(kind, s=150):
         d.line([(75 * S, 40 * S), (75 * S, 8 * S)], fill=ol, width=5 * S)
         d.polygon([(77 * S, 8 * S), (110 * S, 18 * S), (77 * S, 28 * S)], fill=YELLOW,
                   outline=ol)
+    elif kind == 3:  # online shop: laptop with shopping cart
+        d.rounded_rectangle([22 * S, 28 * S, 128 * S, 100 * S], radius=8 * S, fill=WHITE,
+                            outline=ol, width=6 * S)
+        d.rounded_rectangle([32 * S, 38 * S, 118 * S, 90 * S], radius=4 * S, fill=(255, 226, 190))
+        d.polygon([(8 * S, 106 * S), (142 * S, 106 * S), (130 * S, 122 * S), (20 * S, 122 * S)],
+                  fill=(200, 200, 210), outline=ol)
+        d.line([(8 * S, 106 * S), (142 * S, 106 * S), (130 * S, 122 * S), (20 * S, 122 * S),
+                (8 * S, 106 * S)], fill=ol, width=5 * S, joint="curve")
+        # cart on the screen
+        d.line([(48 * S, 50 * S), (58 * S, 50 * S), (66 * S, 74 * S), (96 * S, 74 * S),
+                (102 * S, 56 * S), (61 * S, 56 * S)], fill=CORAL, width=5 * S, joint="curve")
+        for cx in (70, 92):
+            d.ellipse([(cx - 5) * S, 78 * S, (cx + 5) * S, 88 * S], fill=CORAL)
     else:  # flea-market app: phone with price tag
         d.rounded_rectangle([40 * S, 12 * S, 110 * S, 138 * S], radius=16 * S, fill=WHITE,
                             outline=ol, width=6 * S)
@@ -183,7 +196,7 @@ def coin(r=70):
     return out
 
 
-def helmet(w=420):
+def helmet(w=420, straps=True):
     h = int(w * 0.8)
     img = _canvas(w, h)
     d = ImageDraw.Draw(img)
@@ -202,8 +215,9 @@ def helmet(w=420):
     # shine
     d.arc([60 * S, 60 * S, (w - 60) * S, (h * 2 - 200) * S], 200, 245, fill=WHITE, width=14 * S)
     # strap
-    d.line([(w * 0.25 * S, (base + 30) * S), (w * 0.42 * S, (h - 4) * S)], fill=ol, width=8 * S)
-    d.line([(w * 0.75 * S, (base + 30) * S), (w * 0.58 * S, (h - 4) * S)], fill=ol, width=8 * S)
+    if straps:
+        d.line([(w * 0.25 * S, (base + 30) * S), (w * 0.42 * S, (h - 4) * S)], fill=ol, width=8 * S)
+        d.line([(w * 0.75 * S, (base + 30) * S), (w * 0.58 * S, (h - 4) * S)], fill=ol, width=8 * S)
     return _down(img)
 
 
