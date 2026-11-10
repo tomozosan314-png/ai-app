@@ -21,6 +21,9 @@ SOFT = UP + "c89d510c-IMG_7163.mov"      # soft pad close-up (NG)
 WRIST = UP + "8adbd52e-My_Movie_2.mov"   # wrist guard (landscape w/ pillarbox)
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else "video.mp4"
+VO_DIR = "/tmp/claude-0/-home-user-ai-app/4d0dac7b-7b1e-524e-acb0-cc9ba3078324/scratchpad/vo"
+VO = json.load(open(VO_DIR + "/timing.json"))  # narration line lengths (s)
+vo_events = []
 PREVIEW = "--preview" in sys.argv
 
 CAP_BOTTOM = 1590   # captions are pinned to the lower area (above IG UI)
@@ -169,39 +172,41 @@ def decor_stars(img, t, pts):
 scenes = []
 
 
-def scene(dur, bg, *ov, punch_in=True, tag=False, sfx=None):
-    scenes.append(dict(dur=dur, bg=bg, ov=ov, punch=punch_in, tag=tag, sfx=sfx or []))
+def scene(dur, bg, *ov, punch_in=True, tag=False, sfx=None, vo=None):
+    scenes.append(dict(dur=dur, bg=bg, ov=ov, punch=punch_in, tag=tag, sfx=sfx or [],
+                       vo=vo or []))
 
 
 # 1. Hook
-c1 = Clip(HOOK, 3.0, 2.6)
-scene(2.6, lambda t: c1.next(),
+d1 = 0.15 + VO["hook"] + 0.3
+c1 = Clip(HOOK, 3.0, 2.6, speed=2.6 / d1)
+scene(c1.n / FPS, lambda t: c1.next(),
       lambda img, t: caption(img, t, [
           L([("プロテクター、", BLACK)], 140),
           L([("なんとなく", ORANGE), ("で", BLACK)], 150, delay=0.25),
           L([("選んでない？", BLACK)], 150,
             delay=0.45, marker=YELLOW)]),
       lambda img, t: sticker(img, t, text_sprite("？", 200, CORAL), 890, 740, 0.8, rot=-12),
-      sfx=[(0.12, "pop"), (0.57, "pop"), (1.0, "boing")], tag=True)
+      sfx=[(0.12, "pop"), (0.57, "pop"), (1.0, "boing")], tag=True, vo=[(0.15, "hook")])
 
 # 2a. Mini-ramp falls
-c2 = Clip(KIDFALL, 0.0, 2.45, speed=1.0)
+c2 = Clip(KIDFALL, 0.0, 2.45, speed=2.45 / (0.1 + VO["ramp"] + 0.25))
 scene(c2.n / FPS, lambda t: c2.next(),
       lambda img, t: caption(img, t, [
           L([("ミニランプ", ORANGE)], 160),
           L([("特有の", BLACK)], 150, delay=0.2),
           L([("転び方は…？", BLACK)], 150, delay=0.4)]),
-      sfx=[(0.12, "pop"), (0.52, "pop")])
+      sfx=[(0.12, "pop"), (0.52, "pop")], vo=[(0.1, "ramp")])
 
 # 2b. Knee slide = fall onto knees
-c3 = Clip(ADULT, 0.0, 2.4, speed=0.95)
+c3 = Clip(ADULT, 0.0, 2.4, speed=2.4 / (0.1 + VO["knee"] + 0.3))
 scene(c3.n / FPS, lambda t: c3.next(),
       lambda img, t: sticker(img, t, text_sprite("ズザーッ！", 120, ORANGE), 560, 760, 0.25,
                              rot=-10),
       lambda img, t: caption(img, t, [
           L([("ニースライド", CORAL)], 155, marker=YELLOW),
           L([("＝", BLACK), ("膝", ORANGE), ("から転ぶ！", BLACK)], 140, delay=0.35)]),
-      sfx=[(0.25, "whoosh"), (0.12, "pop"), (0.67, "pop")])
+      sfx=[(0.25, "whoosh"), (0.12, "pop"), (0.67, "pop")], vo=[(0.1, "knee")])
 
 # 3. "Lifeline" text card (no illustration)
 def s3_ov(img, t):
@@ -218,7 +223,7 @@ def s3_ov(img, t):
         t, 0.1, W / 2, cy_top=580, maxw=980, scale=0.88)
 
 
-scene(2.5, lambda t: CREAM_BG.copy(), s3_ov,
+scene(0.1 + VO["life"] + 0.3, lambda t: CREAM_BG.copy(), s3_ov, vo=[(0.1, "life")],
       sfx=[(0.0, "whoosh"), (0.1, "pop"), (0.45, "pop"), (0.95, "boing")], tag=False)
 
 # 4a. Split comparison
@@ -245,11 +250,12 @@ def s4a_ov(img, t):
                      L([("みると…", BLACK)], 155, delay=0.15)], start=0.45)
 
 
-scene(2.0, split_bg, s4a_ov, sfx=[(0.15, "pop"), (0.55, "pop"), (0.9, "pop")])
+scene(max(2.0, 0.45 + VO["cmp"] + 0.3), split_bg, s4a_ov, vo=[(0.45, "cmp")])
 
 # 4b. Good pads close
 OKM = ok_mark(360, 40)
-c5 = Clip(BIG, 0.7, 1.35, speed=0.4, crop="760:1351:10:200")
+T5B = 0.1 + VO["hard"] + 0.1
+c5 = Clip(BIG, 0.7, 1.35, speed=1.35 / (T5B + VO["cover"] + 0.3), crop="760:1351:10:200")
 scene(c5.n / FPS, lambda t: c5.next(),
       lambda img, t: sticker(img, t, OKM, 860, 560, 0.3, rot=0),
       lambda img, t: (pill(img, 540, 150, "しっかり", size=82, fg=WHITE, bg=ORANGE, border=WHITE,
@@ -259,16 +265,18 @@ scene(c5.n / FPS, lambda t: c5.next(),
       lambda img, t: caption(img, t, [
           L([("厚め", ORANGE), ("・", BLACK)], 160),
           L([("ハードキャップ", ORANGE), ("！", BLACK)], 125, delay=0.2, marker=YELLOW)],
-          end=1.5),
+          end=T5B - 0.03),
       lambda img, t: caption(img, t, [
           L([("覆う部分が", BLACK)], 155),
           L([("大きい", CORAL), ("ものが", BLACK)], 150, delay=0.2),
-          L([("安心", CORAL)], 185, delay=0.4, marker=YELLOW)], start=1.55),
+          L([("安心", CORAL)], 185, delay=0.4, marker=YELLOW)], start=T5B),
+      vo=[(0.1, "hard"), (T5B, "cover")],
       sfx=[(0.12, "pop"), (0.3, "ding"), (0.42, "pop"), (1.95, "pop"), (2.3, "pop"),
            (2.65, "boing")])
 
 # 5. NG example
-c6 = Clip(SOFT, 0.0, 2.25, speed=0.6)
+T6B = 0.1 + VO["ng1"] + 0.1
+c6 = Clip(SOFT, 0.0, 2.25, speed=2.25 / (T6B + VO["ng2"] + 0.3))
 
 
 def s5_ov(img, t):
@@ -279,17 +287,18 @@ def s5_ov(img, t):
     caption(img, t, [
         L([("柔らかくて", BLACK)], 150),
         L([("小さい", CORAL), ("タイプは", BLACK)], 135, delay=0.2),
-        L([("お勧めしません！", CORAL)], 120, delay=0.4, marker=YELLOW)], end=2.05)
+        L([("お勧めしません！", CORAL)], 120, delay=0.4, marker=YELLOW)], end=T6B - 0.03)
     caption(img, t, [
         L([("安くても", BLACK), ("弱い", ORANGE), ("と", BLACK)], 135),
-        L([("守れない。", CORAL)], 175, delay=0.3, marker=YELLOW)], start=2.1)
+        L([("守れない。", CORAL)], 175, delay=0.3, marker=YELLOW)], start=T6B)
 
 
-scene(c6.n / FPS, lambda t: c6.next(), s5_ov,
+scene(c6.n / FPS, lambda t: c6.next(), s5_ov, vo=[(0.1, "ng1"), (T6B, "ng2")],
       sfx=[(0.12, "pop"), (0.25, "buzz"), (0.42, "pop"), (0.77, "pop"), (2.7, "pop"), (3.15, "pop")])
 
 # 6. Wrist guard (fast-forward)
-c7 = Clip(WRIST, 0.7, 10.5, speed=1.5, crop="608:1080:656:0")
+T7B = 0.35 + VO["wr1"] + 0.1
+c7 = Clip(WRIST, 0.7, 10.5, speed=min(1.5, 10.5 / (T7B + VO["wr2"] + 0.3)), crop="608:1080:656:0")
 FF = ff_badge()
 WR_SHIFT = 630  # move footage up so the wrist/strap stays clear of the captions
 
@@ -315,18 +324,23 @@ scene(c7.n / FPS, wrist_bg,
       lambda img, t: draw_text_block(img, [
           L([("肘", ORANGE), ("・", BLACK), ("手首", ORANGE), ("も", BLACK)], 130),
           L([("セットで", BLACK), ("安心！", CORAL)], 130, delay=0.4, marker=YELLOW)],
-          t, 0.35, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W, end=2.2),
+          t, 0.35, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W, end=T7B - 0.03),
       lambda img, t: draw_text_block(img, [
           L([("硬い方", ORANGE), ("を", BLACK)], 130),
           L([("手のひら", CORAL), ("にしてね！", BLACK)], 130, delay=0.35, marker=YELLOW)],
-          t, 2.25, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W),
-      sfx=[(0.1, "whoosh"), (0.35, "pop"), (0.8, "pop")])
+          t, T7B, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W),
+      vo=[(0.35, "wr1"), (T7B, "wr2")], sfx=[(0.1, "whoosh"), (0.35, "pop"), (0.8, "pop")])
 
 # 7. Where to buy (card)
 ICONS = [shop_icon(k, 150).resize((160, 160), Image.LANCZOS) for k in (0, 1, 3, 2)]
 ROWS = ["プロショップ", "大型\nスポーツショップ", "ネット通販", "ネットフリマ"]
 ROW_COL = [CORAL, (70, 150, 230), (245, 160, 40), (60, 180, 120)]
-ROW_T = [0.5, 0.9, 1.3, 1.7]
+ROW_T = []
+_t = 0.1 + VO["buy"] + 0.05
+for _k in ("b1", "b2", "b3", "b4"):
+    ROW_T.append(_t)
+    _t += VO[_k] + 0.05
+D7 = _t + 0.35
 
 
 def row_card(i):
@@ -371,7 +385,8 @@ def s7_ov(img, t):
     decor_stars(img, t, [(130, 1760, 36, 0), (950, 1770, 30, 2)])
 
 
-scene(4.0, lambda t: CREAM_BG.copy(), s7_ov, tag=False,
+scene(D7, lambda t: CREAM_BG.copy(), s7_ov, tag=False,
+      vo=[(0.1, "buy")] + [(ROW_T[i], "b%d" % (i + 1)) for i in range(4)],
       sfx=[(0.0, "whoosh"), (0.1, "pop")] + [(x, "ding") for x in ROW_T])
 
 # 8. You don't need to spend much (card)
@@ -405,26 +420,27 @@ def s8_ov(img, t):
         L([("お金", ORANGE), ("をかける", BLACK)], 145),
         L([("必要は", BLACK)], 160, delay=0.2),
         L([("ありません！", CORAL)], 150, delay=0.45, marker=YELLOW)],
-        t, 0.35, W / 2, cy_top=600, maxw=980, scale=0.88)
+        t, 0.55, W / 2, cy_top=600, maxw=980, scale=0.88)
     decor_stars(img, t, [(140, 330, 42, 0), (950, 420, 36, 1), (930, 1200, 30, 2)])
 
 
-scene(3.0, lambda t: MINT_BG.copy(), s8_ov, tag=False,
+scene(0.1 + VO["money"] + 0.3, lambda t: MINT_BG.copy(), s8_ov, tag=False, vo=[(0.1, "money")],
       sfx=[(0.0, "whoosh"), (0.1, "pop"), (0.55, "pop"), (0.85, "pop"), (1.25, "boing")]
       + [(c[1] + 0.3, "coin") for c in COINS[::2]])
 
 # 9. Closing
-c9 = Clip(HOOK, 3.6, 2.09, speed=0.63)
+T9B = 0.12 + VO["end1"] + 0.05
+c9 = Clip(HOOK, 3.6, 2.09, speed=2.09 / (T9B + VO["end2"] + 0.35))
 scene(c9.n / FPS, lambda t: c9.next(),
       lambda img, t: caption(img, t, [
           L([("プロテクターは、", BLACK)], 120),
-          L([("思いきり", ORANGE)], 165, delay=0.3)], end=1.55),
+          L([("思いきり", ORANGE)], 165, delay=0.3)], end=T9B - 0.03),
       lambda img, t: caption(img, t, [
           L([("練習するための", BLACK)], 135),
-          L([("道具！", CORAL)], 195, delay=0.3, marker=YELLOW)], start=1.6),
+          L([("道具！", CORAL)], 195, delay=0.3, marker=YELLOW)], start=T9B),
       lambda img, t: decor_stars(img, t, [(150, 880, 38, 0), (930, 840, 32, 2)])
       if t > 1.9 else None,
-      sfx=[(0.12, "pop"), (0.52, "pop"), (2.25, "pop"), (2.7, "boing")])
+      vo=[(0.12, "end1"), (T9B, "end2")], sfx=[(0.12, "pop"), (0.52, "pop"), (2.25, "pop"), (2.7, "boing")])
 
 # 10. Next time: helmet (clean, editorial look)
 HELM = helmet(400, straps=False)
@@ -506,7 +522,8 @@ def s10_ov(img, t):
         paste_scaled(img, box, W / 2, 1670 + 20 * (1 - e), 1.0, e)
 
 
-scene(2.9, lambda t: NX_BASE.copy(), s10_ov, punch_in=False)
+scene(max(2.9, 0.3 + VO["next"] + 0.35), lambda t: NX_BASE.copy(), s10_ov, punch_in=False,
+      vo=[(0.3, "next")])
 
 # 11. Closing card in the style of the shop's chicken notice
 CHICK_SRC = UP + "eddc9882-image.jpg"
@@ -582,7 +599,8 @@ def s11_ov(img, t):
         d.rounded_rectangle([160, 1372, 160 + 760 * p, 1386], radius=7, fill=WHITE)
 
 
-scene(3.4, lambda t: END_BASE.copy(), s11_ov, punch_in=False)
+scene(0.3 + VO["dm"] + 0.5, lambda t: END_BASE.copy(), s11_ov, punch_in=False,
+      vo=[(0.3, "dm")])
 
 # ---------------------------------------------------------------- render
 total = sum(s["dur"] for s in scenes)
@@ -599,6 +617,8 @@ for si, sc in enumerate(scenes):
     nf = int(round(sc["dur"] * FPS))
     for (st, kind) in sc["sfx"]:
         events.append((round(T + st, 3), kind))
+    for (st, key) in sc["vo"]:
+        vo_events.append((round(T + st, 3), key))
     for i in range(nf):
         t = i / FPS
         bg = sc["bg"](t)
@@ -618,4 +638,4 @@ for si, sc in enumerate(scenes):
 
 enc.stdin.close()
 enc.wait()
-json.dump(dict(total=T, events=sorted(events)), open("events.json", "w"))
+json.dump(dict(total=T, events=sorted(events), vo=sorted(vo_events)), open("events.json", "w"))
