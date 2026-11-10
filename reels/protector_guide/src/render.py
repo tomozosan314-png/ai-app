@@ -236,12 +236,11 @@ def split_bg(t):
 
 
 def s4a_ov(img, t):
-    if t > 0.1:
-        pill(img, 270, 420, "小さめ", size=54, fg=WHITE, bg=(120, 120, 130), border=WHITE,
-             scale=ease_out_back((t - 0.1) / 0.3))
-    if t > 0.3:
-        pill(img, 810, 420, "しっかり", size=54, fg=WHITE, bg=ORANGE, border=WHITE,
-             scale=ease_out_back((t - 0.3) / 0.3))
+    sc = 0.9 + 0.1 * ease_out_back(t / 0.3)
+    pill(img, 270, 330, "小さめ", size=70, fg=WHITE, bg=(120, 120, 130), border=WHITE,
+         scale=sc)
+    pill(img, 810, 292, "しっかり", size=76, fg=WHITE, bg=ORANGE, border=WHITE, scale=sc,
+         pady=44)
     caption(img, t, [L([("比べて", BLACK)], 155),
                      L([("みると…", BLACK)], 155, delay=0.15)], start=0.45)
 
@@ -252,9 +251,11 @@ scene(2.0, split_bg, s4a_ov, sfx=[(0.15, "pop"), (0.55, "pop"), (0.9, "pop")])
 OKM = ok_mark(360, 40)
 c5 = Clip(BIG, 0.7, 1.35, speed=0.4, crop="760:1351:10:200")
 scene(c5.n / FPS, lambda t: c5.next(),
-      lambda img, t: sticker(img, t, OKM, 830, 500, 0.3, rot=0),
-      lambda img, t: pill(img, 830, 720, "おすすめ！", size=64, fg=WHITE, bg=(60, 190, 120),
-                          border=WHITE, scale=ease_out_back((t - 0.45) / 0.3)) if t > 0.45 else None,
+      lambda img, t: sticker(img, t, OKM, 860, 560, 0.3, rot=0),
+      lambda img, t: (pill(img, 540, 150, "しっかり", size=82, fg=WHITE, bg=ORANGE, border=WHITE,
+                           scale=0.9 + 0.1 * ease_out_back(t / 0.3)),
+                      pill(img, 540, 282, "おすすめ！", size=66, fg=WHITE, bg=(60, 190, 120),
+                           border=WHITE, scale=0.9 + 0.1 * ease_out_back(t / 0.3))),
       lambda img, t: caption(img, t, [
           L([("厚め", ORANGE), ("・", BLACK)], 160),
           L([("ハードキャップ", ORANGE), ("！", BLACK)], 125, delay=0.2, marker=YELLOW)],
@@ -314,7 +315,11 @@ scene(c7.n / FPS, wrist_bg,
       lambda img, t: draw_text_block(img, [
           L([("肘", ORANGE), ("・", BLACK), ("手首", ORANGE), ("も", BLACK)], 130),
           L([("セットで", BLACK), ("安心！", CORAL)], 130, delay=0.4, marker=YELLOW)],
-          t, 0.35, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W),
+          t, 0.35, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W, end=2.2),
+      lambda img, t: draw_text_block(img, [
+          L([("硬い方", ORANGE), ("を", BLACK)], 130),
+          L([("手のひら", CORAL), ("にしてね！", BLACK)], 130, delay=0.35, marker=YELLOW)],
+          t, 2.25, CAP_X, cy_top=H - WR_SHIFT + 50, maxw=CAP_W),
       sfx=[(0.1, "whoosh"), (0.35, "pop"), (0.8, "pop")])
 
 # 7. Where to buy (card)
