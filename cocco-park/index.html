@@ -38,6 +38,17 @@
     <circle cx="11" cy="63" r="1.6" fill="#3b2a1d"/><circle cx="21" cy="63" r="1.6" fill="#3b2a1d"/>
     <path d="M10 40h12M16 34v12" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
   </symbol>
+  <!-- 立てたスケボー（裏側） -->
+  <symbol id="board-up" viewBox="0 0 44 120">
+    <rect x="8" y="3" width="28" height="114" rx="14" fill="var(--deck, #e8483b)" stroke="#3b2a1d" stroke-width="3"/>
+    <path d="M14 58h16M14 64h16" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>
+    <rect x="10" y="24" width="24" height="6" rx="2" fill="#9aa3ad" stroke="#3b2a1d" stroke-width="2"/>
+    <rect x="10" y="90" width="24" height="6" rx="2" fill="#9aa3ad" stroke="#3b2a1d" stroke-width="2"/>
+    <rect x="1.5" y="20" width="9" height="14" rx="3.5" fill="#f6b93b" stroke="#3b2a1d" stroke-width="2.2"/>
+    <rect x="33.5" y="20" width="9" height="14" rx="3.5" fill="#f6b93b" stroke="#3b2a1d" stroke-width="2.2"/>
+    <rect x="1.5" y="86" width="9" height="14" rx="3.5" fill="#f6b93b" stroke="#3b2a1d" stroke-width="2.2"/>
+    <rect x="33.5" y="86" width="9" height="14" rx="3.5" fill="#f6b93b" stroke="#3b2a1d" stroke-width="2.2"/>
+  </symbol>
   <!-- ヘルメット -->
   <symbol id="helmet" viewBox="0 0 64 48">
     <path d="M6 36C6 18 18 6 33 6s26 12 26 28H6z" fill="var(--helmet, #f6b93b)" stroke="#3b2a1d" stroke-width="3" stroke-linejoin="round"/>
@@ -61,6 +72,7 @@
   </button>
   <nav id="nav" class="nav">
     <a href="#about">こっこパークって？</a>
+    <a href="#park">パーク</a>
     <a href="#price">料金</a>
     <a href="#flow">はじめるまで</a>
     <a href="#coach">コーチ</a>
@@ -80,7 +92,8 @@
       <div class="hero-text">
         <img class="hero-logo" src="images/logo.png" alt="COCCO PARK こっこパーク" width="807" height="703">
         <p class="hero-badge">4さい〜小学生</p>
-        <h1>はじめての<br><span class="hl">スケボー</span>、<br>こっこパークで！</h1>
+        <h1>ころんで、わらって、<br><span class="hl">また のろう！</span></h1>
+        <p class="hero-sub">はじめてのスケボーは、こっこパークで。</p>
         <p class="lead">キッズ専門のスケートボードスクール。<br>元幼稚園の先生が、やさしく楽しく教えます。</p>
         <div class="hero-btns">
           <a href="#contact" class="btn btn-primary">体験を予約する</a>
@@ -121,6 +134,23 @@
         <h3>手ぶらで体験OK</h3>
         <p>初回の30分体験は、ボードなどのレンタル込みで1,000円。気軽にためしてみてね。</p>
       </article>
+    </div>
+  </section>
+
+  <!-- ===== パークのようす ===== -->
+  <section id="park" class="section">
+    <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>パークのようす</h2>
+    <p class="sec-lead">森にかこまれた、手づくりのスケートパーク。<br>にわとりやヤギたちが、おでむかえします。</p>
+    <div class="gallery">
+      <figure class="g-main">
+        <img src="images/park.jpg" alt="木々にかこまれた、屋根つきのランプ" loading="lazy" width="1170" height="896">
+        <figcaption>木と緑にかこまれたパーク</figcaption>
+      </figure>
+      <figure class="g-sub">
+        <img src="images/ramp.jpg" alt="木でできたランプ" loading="lazy" width="825" height="1100">
+        <figcaption>手づくりのランプ</figcaption>
+      </figure>
+      <img class="g-chick" src="images/chicken-white.png" alt="" aria-hidden="true">
     </div>
   </section>
 
@@ -182,12 +212,18 @@
     <svg class="sk sk-c1" aria-hidden="true"><use href="#helmet"/></svg>
     <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>コーチ紹介</h2>
     <div class="staff-main">
-      <img src="images/staff.png" alt="コーチのイラスト" class="staff-photo">
+      <div class="coach-photo">
+        <img src="images/coach.jpg" alt="コーチの大西知美" loading="lazy" width="720" height="900">
+      </div>
       <div class="staff-body">
         <p class="staff-role">コーチ</p>
         <h3>大西 知美</h3>
         <p class="staff-tags"><span>元幼稚園教諭</span><span>スケボー歴10年</span></p>
         <p>子どもたちの「できた！」がいちばんうれしい瞬間です。はじめてのスケボー、いっしょに楽しみましょう！</p>
+      </div>
+      <div class="coach-illust" aria-hidden="true">
+        <img src="images/staff.png" alt="">
+        <svg class="coach-board"><use href="#board-up"/></svg>
       </div>
     </div>
 
@@ -228,6 +264,18 @@
         <p>開講日はカレンダーでお知らせしています。下の「開講日カレンダー」からチェックしてください。</p>
       </details>
     </div>
+  </section>
+
+  <!-- ===== イベント出張（おまけ） ===== -->
+  <section class="section event-wrap">
+    <aside class="event">
+      <img src="images/miniramp.jpg" alt="移動式のミニランプ" loading="lazy" width="675" height="900">
+      <div>
+        <p class="event-label">イベント出張</p>
+        <h3>移動式ミニランプで、出店もできます</h3>
+        <p>マルシェやイベントに、ミニランプを持って出店できます。場所までの距離によってご相談ください。</p>
+      </div>
+    </aside>
   </section>
 
   <!-- ===== お問い合わせ ===== -->
