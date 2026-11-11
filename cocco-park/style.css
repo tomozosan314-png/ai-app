@@ -584,3 +584,8 @@ h1, h2, h3 { line-height: 1.35; margin: 0; }
 @media (max-width: 760px) { .rules { grid-template-columns: 1fr; } }
 @media (max-width: 700px) { .event-ico { width: 84px; height: 84px; font-size: 2rem; } }
 @media (max-width: 560px) { .level-list { grid-template-columns: 1fr; gap: 4px; } .level-list dt { width: fit-content; margin-top: 6px; } }
+.perks { margin: 6px 0 4px; background: #fff3d1; border-radius: 12px; padding: 8px 12px; }
+.perks-title { margin: 0 0 2px; font-weight: 800; font-size: .88rem; }
+.perks ul { margin: 0; padding-left: 1.2em; }
+.perks li { font-size: .85rem; font-weight: 700; }
+.perks small { font-weight: 400; color: var(--ink-soft); }
