@@ -361,6 +361,20 @@ h1, h2, h3 { line-height: 1.35; margin: 0; }
 .event h3 { font-size: 1rem; }
 .event p:last-child { margin: 4px 0 0; font-size: .85rem; color: var(--ink-soft); line-height: 1.7; }
 
+/* ---------- v4 additions ---------- */
+.area { display: inline-block; font-weight: 800; color: var(--ink); background: #fff; border: 2px solid #f0d8b4; border-radius: 999px; padding: 0 12px; margin-bottom: 6px; font-size: .92rem; }
+.cards { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.card { padding: 24px 18px; }
+.card h3 { font-size: 1.05rem; }
+.c-blue { background: #cfe6fb; }
+.ico-weather { width: 70px; height: 62px; }
+.weather-chips { list-style: none; padding: 0; margin: 28px auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.weather-chips li { background: #fff; border: 2px solid #f0d8b4; border-radius: 999px; padding: 6px 16px; font-weight: 700; font-size: .92rem; box-shadow: 0 3px 0 rgba(74,52,36,.08); }
+
+@media (max-width: 1000px) {
+  .cards { grid-template-columns: repeat(2, 1fr); max-width: 720px; margin-left: auto; margin-right: auto; }
+}
+
 @media (max-width: 900px) {
   .menu-btn {
     display: grid; gap: 5px; width: 46px; height: 46px; place-content: center;
@@ -389,7 +403,7 @@ h1, h2, h3 { line-height: 1.35; margin: 0; }
   .art-board { width: 90px; }
   .sun { width: 180px; height: 180px; }
 
-  .cards, .plans { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .plans { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
   .plans { gap: 32px; }
   .flow { grid-template-columns: 1fr 1fr; row-gap: 36px; }
   .flow li::after { display: none; }
@@ -430,6 +444,16 @@ h1, h2, h3 { line-height: 1.35; margin: 0; }
 }
 
 @media (max-width: 700px) {
+  .cards { grid-template-columns: 1fr; max-width: 480px; gap: 14px; }
+  .card { display: grid; grid-template-columns: 72px 1fr; gap: 2px 14px; align-items: center; text-align: left; padding: 16px; }
+  .card-ico { width: 72px; height: 72px; grid-row: span 2; align-self: start; }
+  .card-ico .chick-ico.big { width: 46px; height: 46px; }
+  .card-ico img.ico-staff { height: 64px !important; margin-top: 12px; }
+  .ico-board { width: 56px; height: 24px; }
+  .ico-weather { width: 48px; height: 42px; }
+  .card h3 { margin: 0; }
+  .card p { font-size: .88rem; }
+  .weather-chips { margin-top: 40px; }
   .gallery { grid-template-columns: 1fr; }
   .g-sub img { aspect-ratio: 4 / 3; object-position: center 70%; }
   .g-chick { width: 70px; bottom: -30px; right: -4px; }

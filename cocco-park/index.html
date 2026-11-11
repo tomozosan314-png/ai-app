@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>こっこパーク｜キッズスケボースクール</title>
-  <meta name="description" content="こっこパークは、4歳から小学生まで通えるキッズ向けスケートボードスクールです。元幼稚園教諭のコーチがやさしく教えます。初回30分体験はレンタル込み1,000円。">
+  <title>こっこパーク｜高山市丹生川町のキッズスケボースクール</title>
+  <meta name="description" content="こっこパークは、岐阜県高山市丹生川町にある4歳から小学生まで通えるキッズ向けスケートボードスクールです。元幼稚園教諭のコーチがマンツーマンでやさしく教えます。全天候型のパークで雨や雪の日もOK。初回30分体験はレンタル込み1,000円。">
   <link rel="icon" href="images/chicken-white.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,6 +48,12 @@
     <rect x="33.5" y="20" width="9" height="14" rx="3.5" fill="#f6b93b" stroke="#3b2a1d" stroke-width="2.2"/>
     <rect x="1.5" y="86" width="9" height="14" rx="3.5" fill="#f6b93b" stroke="#3b2a1d" stroke-width="2.2"/>
     <rect x="33.5" y="86" width="9" height="14" rx="3.5" fill="#f6b93b" stroke="#3b2a1d" stroke-width="2.2"/>
+  </symbol>
+  <!-- 天気（雲・雨・雪） -->
+  <symbol id="weather" viewBox="0 0 64 56">
+    <path d="M18 34a10 10 0 0 1 2-19.8A14 14 0 0 1 46 16a9 9 0 0 1 0 18z" fill="#fff" stroke="#3b2a1d" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M22 41l-3 6M34 41l-3 6" stroke="#4a90d9" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M46 40v10M41 45h10M42.5 41.5l7 7M49.5 41.5l-7 7" stroke="#3b2a1d" stroke-width="2" stroke-linecap="round"/>
   </symbol>
   <!-- ヘルメット -->
   <symbol id="helmet" viewBox="0 0 64 48">
@@ -94,7 +100,7 @@
         <p class="hero-badge">4さい〜小学生</p>
         <h1>ころんで、わらって、<br><span class="hl">また のろう！</span></h1>
         <p class="hero-sub">はじめてのスケボーは、こっこパークで。</p>
-        <p class="lead">キッズ専門のスケートボードスクール。<br>元幼稚園の先生が、やさしく楽しく教えます。</p>
+        <p class="lead"><span class="area">📍 岐阜県 高山市 丹生川町</span><br>キッズ専門のスケートボードスクール。<br>元幼稚園の先生が、やさしく楽しく教えます。</p>
         <div class="hero-btns">
           <a href="#contact" class="btn btn-primary">体験を予約する</a>
           <a href="#price" class="btn btn-ghost">料金を見る</a>
@@ -131,8 +137,13 @@
       </article>
       <article class="card">
         <div class="card-ico c-mint"><svg class="ico-board"><use href="#board"/></svg></div>
-        <h3>手ぶらで体験OK</h3>
-        <p>初回の30分体験は、ボードなどのレンタル込みで1,000円。気軽にためしてみてね。</p>
+        <h3>基本はマンツーマン</h3>
+        <p>一人ひとりにしっかり向き合います。兄弟いっしょや少人数もご相談OK。道具の貸し出しもあります。</p>
+      </article>
+      <article class="card">
+        <div class="card-ico c-blue"><svg class="ico-weather"><use href="#weather"/></svg></div>
+        <h3>雨の日も雪の日もOK</h3>
+        <p>屋根とカーテンつきの全天候型パーク。ライト完備で、暗くなる夕方も練習できます。</p>
       </article>
     </div>
   </section>
@@ -140,7 +151,7 @@
   <!-- ===== パークのようす ===== -->
   <section id="park" class="section">
     <h2 class="sec-title"><svg class="chick-ico brown"><use href="#chick"/></svg>パークのようす</h2>
-    <p class="sec-lead">森にかこまれた、手づくりのスケートパーク。<br>にわとりやヤギたちが、おでむかえします。</p>
+    <p class="sec-lead">森にかこまれた、手づくりの全天候型スケートパーク。<br>にわとりやヤギたちが、おでむかえします。</p>
     <div class="gallery">
       <figure class="g-main">
         <img src="images/park.jpg" alt="木々にかこまれた、屋根つきのランプ" loading="lazy" width="1170" height="896">
@@ -152,6 +163,12 @@
       </figure>
       <img class="g-chick" src="images/chicken-white.png" alt="" aria-hidden="true">
     </div>
+    <ul class="weather-chips">
+      <li>☔ 雨の日もOK</li>
+      <li>⛄ 雪の日もOK</li>
+      <li>💡 ライト完備で夕方もOK</li>
+      <li>🧣 カーテンを閉めればあったか</li>
+    </ul>
   </section>
 
   <!-- ===== 料金 ===== -->
@@ -169,7 +186,7 @@
         <p class="price">1,000<small>円</small></p>
         <ul class="checks">
           <li>初回のみ</li>
-          <li>ボード・道具は貸し出します</li>
+          <li>ボード・道具の貸し出し込み</li>
         </ul>
       </article>
       <article class="plan">
@@ -177,8 +194,9 @@
         <p class="plan-time">1時間</p>
         <p class="price">2,000<small>円</small></p>
         <ul class="checks">
-          <li>レベルに合わせてステップアップ</li>
-          <li>開講日はカレンダーをチェック</li>
+          <li>基本はマンツーマン</li>
+          <li>兄弟いっしょ・少人数もご相談OK</li>
+          <li>道具の貸し出しあり</li>
         </ul>
       </article>
     </div>
@@ -194,10 +212,10 @@
   <section id="flow" class="section">
     <h2 class="sec-title"><svg class="chick-ico white"><use href="#chick"/></svg>はじめるまでの流れ</h2>
     <ol class="flow">
-      <li><span class="step">1</span><h3>カレンダーをチェック</h3><p>開講日をカレンダーで確認してね。</p></li>
-      <li><span class="step">2</span><h3>LINE・インスタDMで連絡</h3><p>ご希望の日をお知らせください。</p></li>
-      <li><span class="step">3</span><h3>場所などのご案内</h3><p>ご連絡いただいた方に、詳細をお伝えします。</p></li>
-      <li><span class="step">4</span><h3>体験レッスン！</h3><p>30分・レンタル込みで1,000円。</p></li>
+      <li><span class="step">1</span><h3>LINE・インスタDMで連絡</h3><p>ご希望の日時や人数をお知らせください。</p></li>
+      <li><span class="step">2</span><h3>日時・場所のご案内</h3><p>日程を調整して、詳しい場所をお伝えします。</p></li>
+      <li><span class="step">3</span><h3>体験レッスン！</h3><p>30分・レンタル込みで1,000円。手ぶらでOK。</p></li>
+      <li><span class="step">4</span><h3>レッスンスタート</h3><p>1時間2,000円。ペースに合わせて続けられます。</p></li>
     </ol>
     <div class="flow-chicks" aria-hidden="true">
       <svg class="chick-ico white walk"><use href="#chick"/></svg>
@@ -245,7 +263,7 @@
     <div class="faq">
       <details>
         <summary>スケボーをもっていなくても大丈夫？</summary>
-        <p>大丈夫です！初回の体験はレンタル込みなので、手ぶらで来られます。動きやすい服装とスニーカーでお越しください。</p>
+        <p>大丈夫です！体験でも通常レッスンでも、ボードなどの道具を貸し出しています。動きやすい服装とスニーカーでお越しください。</p>
       </details>
       <details>
         <summary>運動が苦手な子でもできますか？</summary>
@@ -257,11 +275,19 @@
       </details>
       <details>
         <summary>場所はどこですか？</summary>
-        <p>ご連絡いただいた方に、詳しい場所をお伝えしています。LINEまたはインスタのDMからお問い合わせください。</p>
+        <p>岐阜県高山市丹生川町です。詳しい場所は、ご連絡いただいた方にお伝えしています。LINEまたはインスタのDMからお問い合わせください。</p>
       </details>
       <details>
         <summary>開講日はいつですか？</summary>
-        <p>開講日はカレンダーでお知らせしています。下の「開講日カレンダー」からチェックしてください。</p>
+        <p>決まった開講日はなく、その都度ご相談して日時を決めています。LINEまたはインスタのDMでご希望をお知らせください。</p>
+      </details>
+      <details>
+        <summary>雨や雪の日、夕方でも大丈夫？</summary>
+        <p>大丈夫です！屋根とカーテンつきの全天候型パークなので、雨の日も雪の日も練習できます。ライトも完備しているので、暗くなる夕方もOK。冬はカーテンを閉めるとあたたかいですよ。</p>
+      </details>
+      <details>
+        <summary>兄弟いっしょに受けられますか？</summary>
+        <p>はい、兄弟いっしょや少人数でのレッスンもOKです。基本はマンツーマンなので、人数や内容はその時々でご相談させてください。</p>
       </details>
     </div>
   </section>
@@ -291,7 +317,7 @@
         <a href="https://www.instagram.com/coccopark_skateboard/" class="btn btn-insta" target="_blank" rel="noopener">インスタDMを送る</a>
       </div>
       <a href="https://lit.link/coccopark" class="cal-link" target="_blank" rel="noopener">
-        <svg class="chick-ico white"><use href="#chick"/></svg>開講日カレンダー・リンク集はこちら →
+        <svg class="chick-ico white"><use href="#chick"/></svg>こっこパークのリンク集はこちら →
       </a>
     </div>
   </section>
