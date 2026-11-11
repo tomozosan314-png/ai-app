@@ -555,3 +555,10 @@ h1, h2, h3 { line-height: 1.35; margin: 0; }
 @media (max-width: 560px) { .flow { grid-template-columns: 1fr; } }
 .flow h3 { font-size: .95rem; }
 .flow p { font-size: .85rem; }
+.reg-btns { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 8px; }
+.reg-btn { text-decoration: none; font-weight: 800; font-size: .92rem; padding: 9px 18px; border-radius: 999px; color: #fff; }
+.reg-school { background: var(--red); box-shadow: 0 4px 0 #b8322a; }
+.reg-free { background: #3a9d8f; box-shadow: 0 4px 0 #287266; }
+.reg-btn:hover { transform: translateY(-1px); }
+.reg-box .reg-note { font-size: .8rem; }
+@media (max-width: 560px) { .reg-btn { flex: 1 1 100%; text-align: center; } }
